@@ -12,14 +12,17 @@ Upgrade to a Websocket connection with `GET ws(s)://server/ws`
 
 ### login
 
+All the SHA256 hashes are converted into hex before the are processed any further.
+
 - username: string - *Nickname of the user*
-- password: string - *SHA256 hash of the users password followed by a space and the current UNIX-timestamp*
-    - Servers should accept the login if the timestamp is at most 10 seconds behind the timestamp
+- password: string - *SHA256(password)*
+- anti_replay: string - *SHA256(SHA256(password) + " " + timestamp)*
 - timestamp: number - The current UNIX-timestamp
+    - Servers should accept the login if the timestamp is at most 10 seconds behind the timestamp
 
-### text
+### message
 
-- text: string - Text!
+- text: string - Text to send in the active channel!
 
 ### status
 
@@ -46,8 +49,13 @@ Join a channel and request its contents
     3. Password incorrect
     4. Timestamp wrong
     5. Connection throttled (reconnected too fast ( < 20s ))
+- channel: string - *name of the channel the user starts in*
 
-### text
+### error
+
+- message: string
+
+### message
 
 - username: string
 - text: string
@@ -59,7 +67,7 @@ Join a channel and request its contents
 
 ### channel
 
-- current_message_number: number - *number of newest message
+- current_message_number: number - *number of newest message*
 - history: Array
     - username: string
     - text: string
