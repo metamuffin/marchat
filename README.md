@@ -28,6 +28,14 @@ Upgrade to a Websocket connection with `GET ws(s)://server/ws`
     2. Online
     3. AFK
 
+### channel
+
+Join a channel and request its contents
+
+- name: string - *New active channel of this user*
+- count: number - *number of messages to display*
+- offset: number - *where to start the history (-1 for latest)*
+
 ## Server-bound Packets
 
 ### login
@@ -48,6 +56,14 @@ Upgrade to a Websocket connection with `GET ws(s)://server/ws`
 
 - username: string
 - status: number - See client-bound packet
+
+### channel
+
+- current_message_number: number - *number of newest message
+- history: Array
+    - username: string
+    - text: string
+    - number: number
 
 ## Important Notes
 

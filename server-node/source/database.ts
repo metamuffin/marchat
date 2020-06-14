@@ -1,7 +1,10 @@
-import { MongoClient } from "mongodb";
-export var dbcon:any;
+import { MongoClient, Db } from "mongodb";
+export var dbclient:MongoClient;
+export var dbcon:Db
 
 export async function connectDB(){
-    dbcon = await MongoClient.connect("mongodb://marchat.zapto.org:27017")
+    dbclient = await MongoClient.connect("mongodb://marchat.zapto.org:27017")
+    dbcon = dbclient.db("marchat")
+    return
 }
 

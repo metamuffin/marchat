@@ -2,6 +2,8 @@
 import express from "express";
 import expressWs from "express-ws";
 import { User } from "./user";
+import { connectDB } from "./database";
+import { packets } from "./packets";
 
 export var packet_split_regex:RegExp = /(?<pname>.+):(?<pdata>.+)/ig
 
@@ -19,7 +21,17 @@ app.ws("/ws",(ws,req) => {
         var matches:RegExpMatchArray|null = (packet_split_regex).exec(sdata)
         var packet_name:string = matches?.groups?.pname || ""
         var packet_data:string = matches?.groups?.pdata || "" 
-        
+        if (packets.hasOwnProperty(packet_name)){
+            var j:Object = {};
+            var packet_data_decoded = new Buffer(packet_data, "base64").toString()
+            try {
+                j = JSON.parse(packet_data_decoded);
+            } catch (e) {
+                console.log(`Invalid JSON: ${packet_data}`);
+            } finally {
+                packets[packet_name](j);
+            }
+        }
     })
     
     // Handle for websocket closing
@@ -30,4 +42,8 @@ app.ws("/ws",(ws,req) => {
 
 console.log("Listening...");
 // Start the webserver
-app.listen(5555);
+async function main(){
+    await connectDB()
+    app.listen(5555);
+}
+main()
