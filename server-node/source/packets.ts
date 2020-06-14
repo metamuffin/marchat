@@ -64,7 +64,7 @@ export async function userLogin(ws: WebSocket, data:any): Promise<undefined | Us
         return
     }
     var newuser = new User(data.username)
-    await newuser.initialize()
+    await newuser.initializeOnline(ws)
     return newuser
 }
 
@@ -88,12 +88,12 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
                 sendPacket(user,"error",{message:"Channel not found"})
                 return
             }
-            user.joinChannel(ch);
+            await user.joinChannel(ch);
         }
         await user.sendChannelUpdate(data.count,data.offset)
     },
     message: async (user, data) => {
-        if (typeof data.message == "string") {
+        if (typeof data.message != "string") {
             sendPacket(user,"error",{message:"Please send a message not nothing"})
             return
         }

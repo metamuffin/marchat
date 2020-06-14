@@ -16,23 +16,28 @@ export class Channel {
     }
 
     public async initialize() {
-        var data = await dbcon.collection("user").findOne({username: this.name})
+        console.log(`Loading channel: ${this.name}`);
+        var data = await dbcon.collection("channel").findOne({name: this.name})
         this.name = data.name
         this.users = data.users
+        this.messageHistory = data.messageHistory
+        
     }
 
-    public dump():string {
-        return JSON.stringify({
+    public dump():any {
+        return {
             name: this.name,
             users: this.users,
             messageHistory: this.messageHistory
-        })
+        }
     }
 
     public unload(){
+        console.log(`Unloading channel: ${this.name}`);
         loadedChannels.splice(loadedChannels.findIndex(u => u.name == this.name))
         var j = this.dump()
-        dbcon.collection("user").replaceOne({name: this.name}, j)
+        console.log(j);
+        dbcon.collection("channel").replaceOne({name: this.name}, j)
     }
 
     public appendMessage(user: User, text: string) {
@@ -49,6 +54,7 @@ export class Channel {
         if (offset < 0) offset = this.messageHistory.length
         var start = Math.max(0,Math.min(this.messageHistory.length,offset - count))
         var end = Math.max(0,Math.min(this.messageHistory.length,offset))
-        return this.messageHistory.slice(start,end)
+        console.log(`Reading Messages from ${start} to ${end}.`);
+        return this.messageHistory.slice(start,end + 1)
     }
 }

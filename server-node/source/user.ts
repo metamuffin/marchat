@@ -27,6 +27,7 @@ export class User {
     }
 
     public async initialize(){
+        console.log(`Loading user: ${this.username}`);
         onlineUsers.push(this);
         loadedUsers.push(this);
         var data = await dbcon.collection("user").findOne({username: this.username})
@@ -35,19 +36,26 @@ export class User {
         this.channels = data.channels
     }
 
-    public dump():string {
-        return JSON.stringify({
+    public dump():any {
+        return {
             username: this.username,
             password: this.password,
             channels: this.channels,
-        })
+        }
     }
 
     public unload(){
         onlineUsers.splice(onlineUsers.findIndex(u => u.username == this.username))
         loadedUsers.splice(loadedUsers.findIndex(u => u.username == this.username))
+        this.currentChannel?.activeUsers.splice(this.currentChannel.activeUsers.findIndex(c => c.username == this.username))
+        if ((this.currentChannel?.activeUsers?.length || 0) < 1) {
+            this.currentChannel?.unload()
+        }
         var j = this.dump()
+        console.log(j);
         dbcon.collection("user").replaceOne({username: this.username}, j)
+        console.log(`Unloading user: ${this.username}`);
+        
     }
 
     public async sendMessage(text:string) {

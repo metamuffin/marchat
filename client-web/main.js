@@ -21,7 +21,7 @@ async function sha256(message) {
 }
 
 
-window.onload = () => {
+window.onload = async () => {
     ws = new WebSocket("ws://localhost:5555/ws")
     ws.onmessage = (ev) => {
         console.log(ev.data.toString())
@@ -30,7 +30,20 @@ window.onload = () => {
         console.log(JSON.parse(atob(f.split(":")[1])));
         
     }
-    ws.onopen = () => console.log("WS_OPEN")
+    ws.onopen = async () => {
+        console.log("WS_OPEN")
+        ws.send("login:" + btoa(
+            JSON.stringify({
+                username:"marchat-goes",
+                password: await sha256("brr"),
+                anti_replay: await sha256(
+                    await sha256("brr") + " " + Math.floor(Date.now() / 1000).toString()
+                ),
+                timestamp:Math.floor(Date.now() / 1000)
+            })
+        ));
+        //ws.send("login:" + btoa(JSON.stringify({username:"marchat-goes", password: await sha256("brr"), anti_replay: await sha256(await sha256("brr")+" "+Math.floor(Date.now() / 1000).toString()),timestamp:Math.floor(Date.now() / 1000)})));
+    }
     ws.onclose = () => console.log("WS_CLOSE")
     ws.onerror = (ev) => console.log(`WS_ERROR: ${ev}`)
 }

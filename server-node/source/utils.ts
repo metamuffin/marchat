@@ -17,7 +17,7 @@ export async function getUser(username:string): Promise<User | undefined> {
         var dbuser = await dbcon.collection("user").findOne({username: username})
         if (!dbuser) return
         user = new User(username)
-        user.initialize()
+        await user.initialize()
         return user
     }
 }
@@ -28,7 +28,7 @@ export async function getChannel(name:string): Promise<Channel | undefined> {
         var dbuser = await dbcon.collection("channel").findOne({name: name})
         if (!dbuser) return
         channel = new Channel(name)
-        channel.initialize()
+        await channel.initialize()
         return channel
     }
 }
