@@ -1,0 +1,36 @@
+{
+  "name": "marchat-node-server",
+  "version": "1.0.0",
+  "description": "A implimentation for a marchat server.",
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "directory": "",
+    "url": "https://www.github.com/MetaMuffin/marchat"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node ./build/index.js",
+    "start:ts": "ts-node ./source/index.ts",
+    "watch": "nodemon"
+  },
+  "keywords": [
+    "chat",
+    "websockets",
+    "server"
+  ],
+  "author": "MetaMuffin",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@types/express-ws": "^3.0.0",
+    "@types/mongodb": "^3.5.20",
+    "@types/node": "^14.0.13",
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
+    "mongodb": "^3.5.9"
+  }
+}

@@ -49,3 +49,19 @@ Upgrade to a Websocket connection with `GET ws(s)://server/ws`
 - username: string
 - status: number - See client-bound packet
 
+## Important Notes
+
+Running the nodejs server requires a mongodb server.
+Create `secret.ts` and export a constant object with the following keys:
+
+- `mongo_user`: Username for mongodb
+- `mongo_password`: Password for mongodb
+
+A sample `secret.ts` file.
+
+```typescript
+export const secrets = {
+    mongo_user: "mongo-goes",
+    mongo_password: "brrr"
+}
+```

@@ -1,2 +1,4 @@
 /server-node/node_modules
 /server-node/build/**
+/server-node/source/secret.ts
+
