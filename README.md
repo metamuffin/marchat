@@ -20,11 +20,6 @@ All the SHA256 hashes are converted into hex before the are processed any furthe
 - timestamp: number - The current UNIX-timestamp
     - Servers should accept the login if the timestamp is at most 10 seconds behind the timestamp
 
-### channel-list
-
-All channels the logged in user has been added.
--channel-list:{"channels":["channel1","channel2","channel3"]} 
-
 ### message
 
 - text: string - Text to send in the active channel!
@@ -55,6 +50,10 @@ Join a channel and request its contents
     4. Timestamp wrong
     5. Connection throttled (reconnected too fast ( < 20s ))
 - channel: string - *name of the channel the user starts in*
+
+### channel-list
+
+- channels: Array of String - *All channels the user joined*
 
 ### error
 
