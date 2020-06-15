@@ -20,6 +20,11 @@ All the SHA256 hashes are converted into hex before the are processed any furthe
 - timestamp: number - The current UNIX-timestamp
     - Servers should accept the login if the timestamp is at most 10 seconds behind the timestamp
 
+### channel-list
+
+All channels the logged in user has been added.
+-channel-list:{"channels":["channel1","channel2","channel3"]} 
+
 ### message
 
 - text: string - Text to send in the active channel!
