@@ -16,7 +16,7 @@ All the SHA256 hashes are converted into hex before the are processed any furthe
 
 - username: string - *Nickname of the user*
 - password: string - *SHA256(password)*
-- anti_replay: string - *SHA256(SHA256(password) + " " + timestamp)*
+- anti_replay: string - *SHA256(SHA256(password) + " " + timestamp) This is useless!!!!!!!!!!!!!!!!!* 
 - timestamp: number - The current UNIX-timestamp
     - Servers should accept the login if the timestamp is at most 10 seconds behind the timestamp
 

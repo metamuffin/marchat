@@ -22,7 +22,7 @@ async function sha256(message) {
 
 
 window.onload = async () => {
-    ws = new WebSocket("ws://localhost:5555/ws")
+    ws = new WebSocket(`ws://${prompt("IP bitteeee!","123.456.78.9")}:5555/ws`)
     ws.onmessage = (ev) => {
         console.log(ev.data.toString())
         var f = ev.data.toString()
