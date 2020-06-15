@@ -21,18 +21,22 @@ app.ws("/ws",(ws,req) => {
         var sdata:string = data.toString()
         console.log(sdata);
 
-        var matches:RegExpMatchArray|null = (packet_split_regex).exec(sdata)
+        /*var matches:RegExpMatchArray|null = (packet_split_regex).exec(sdata)
+        console.log(matches);
+        
         var packet_name:string = matches?.groups?.pname || ""
         var packet_data:string = matches?.groups?.pdata || ""
+        */
+        var [packet_name, packet_data] = sdata.split(":")
         console.log(`[P] ${packet_name} -> ${packet_data}`);
         
+
         if (packets.hasOwnProperty(packet_name)){
             var j:Object = {};
             var packet_data_decoded = Buffer.from(packet_data, "base64").toString()
             try {
                 j = JSON.parse(packet_data_decoded);
                 console.log(j);
-                
             } catch (e) {
                 console.log(`Invalid JSON: ${packet_data}`);
             } finally {
