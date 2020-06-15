@@ -14,6 +14,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  _LoginScreenState(){
+    startWS();
+  }
+
   void runLogin(){
     sendPacket("login", {
       "username": usernameController.text
