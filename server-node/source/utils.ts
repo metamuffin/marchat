@@ -2,6 +2,8 @@ import { createHash } from "crypto"
 import { User, loadedUsers } from "./user"
 import { dbcon } from "./database"
 import { loadedChannels, Channel } from "./channel"
+import WebSocket from "ws"
+import { sendPacketRaw } from './packets';
 
 export function SHA256(data:string): string {
     var hash = createHash("sha256")
@@ -33,4 +35,20 @@ export async function getChannel(name:string): Promise<Channel | undefined> {
     }
 }
 
+// Returns true if there is an error
+export async function dataAssertType(ws: WebSocket | undefined, data:any, type: string, error: string){
+    if (data && typeof data == type) {
+        return false
+    }
+    s_error(ws, error)
+    return true
+}
 
+export function s_ok(ws: WebSocket){
+    sendPacketRaw(ws,"ok",{})
+}
+
+export function s_error(ws: WebSocket | undefined, msg: string){
+    if (!ws) return console.log(`Skipped error for offline user: "${msg}"`)
+    sendPacketRaw(ws,"message",{message: msg})
+}

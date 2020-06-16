@@ -13,12 +13,39 @@ Upgrade to a Websocket connection with `GET ws(s)://server/ws`
 ### login
 
 All the SHA256 hashes are converted into hex before the are processed any further.
+Response: error or ok
 
 - username: string - *Nickname of the user*
 - password: string - *SHA256(password)*
 - anti_replay: string - *SHA256(SHA256(password) + " " + timestamp) This is useless!!!!!!!!!!!!!!!!!* 
 - timestamp: number - The current UNIX-timestamp
     - Servers should accept the login if the timestamp is at most 10 seconds behind the timestamp
+
+### register
+
+Responses: error or ok
+
+- username: string - *Nickname of the user*
+- password: string - *SHA256(password)*
+
+### channel-create
+
+- name: string
+
+### channel-user-add
+
+- username: string
+
+### channel-user-remove
+
+- username: string
+
+### channel-update-admin
+
+- username: string
+- value: number
+    1. Raise priveleges of this user to full access of this channel
+    0. Remove All Privileges of this user
 
 ### message
 
@@ -51,10 +78,22 @@ Join a channel and request its contents
     5. Connection throttled (reconnected too fast ( < 20s ))
 - channel: string - *name of the channel the user starts in*
 
+### ok
+
+The last action send was successful!
+This will be sent if the action doesnt respond with a packet by default.
+
 ### channel-list
 
-- channels: Array of String - *All channels the user joined*
+- channels: A
+- name: string
 
+### channel-update-admin
+
+- username: string
+- value: number
+    1. Raise priveleges of this user to full access of this channel
+    0. Remove All Privileges of this userrray of String - *All channels the user joined*
 ### error
 
 - message: string
