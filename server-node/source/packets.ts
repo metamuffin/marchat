@@ -6,6 +6,7 @@ import { Channel } from "./channel";
 
 export function sendPacketRaw(ws: WebSocket, pname: string, pdata: Object){
     var j = JSON.stringify(pdata)
+    console.log(`[SEND_RAW] ${pname} -> ${j}`);
     var b64 = Buffer.from(j).toString("base64")
     if (!ws) console.log(`Skipped packet for offline user: ${pname}`);
     ws.send(pname + ":" + b64)
@@ -13,6 +14,7 @@ export function sendPacketRaw(ws: WebSocket, pname: string, pdata: Object){
 
 export function sendPacket(user: User, pname: string, pdata: Object){
     var j = JSON.stringify(pdata)
+    console.log(`[SEND] ${user.username}: ${pname} -> ${j}`);
     var b64 = Buffer.from(j).toString("base64")
     if (!user.ws) console.log(`Skipped packet for offline user: ${pname}`);
     user.ws?.send(pname + ":" + b64)
@@ -20,6 +22,7 @@ export function sendPacket(user: User, pname: string, pdata: Object){
 
 export function broadcastPacket(users:Array<User>, pname: string, pdata: Object){
     var j = JSON.stringify(pdata)
+    console.log(`[SEND_BROADCAST] ${pname} -> ${j}`);
     var b64 = Buffer.from(j).toString("base64")
     for (const user of onlineUsers) {
         if (!user.ws) console.log(`Skipped packet for offline user: ${pname}`);
@@ -65,8 +68,10 @@ export async function userLogin(ws: WebSocket, data:any): Promise<undefined | Us
     }
     var newuser = new User(data.username)
     await newuser.initializeOnline(ws)
+    await newuser.sendChannelList();
     return newuser
 }
+
 
 export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
     channel: async (user:User, data:any) => {

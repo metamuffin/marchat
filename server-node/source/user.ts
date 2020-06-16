@@ -22,7 +22,7 @@ export class User {
     }
     
     public async initializeOnline(ws: WebSocket) {
-        this.initialize()
+        await this.initialize()
         this.ws = ws;
     }
 
@@ -80,6 +80,12 @@ export class User {
         sendPacket(this,"channel",{
             current_message_number: this.currentChannel?.messageHistory.length,
             history: msgs
+        })
+    }
+
+    public async sendChannelList(){
+        sendPacket(this,"channel-list",{
+            channels: this.channels
         })
     }
 
