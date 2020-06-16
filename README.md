@@ -28,19 +28,19 @@ Responses: error or ok
 - username: string - *Nickname of the user*
 - password: string - *SHA256(password)*
 
-### channel-create
+### channel_create
 
 - name: string
 
-### channel-user-add
+### channel_user_add
 
 - username: string
 
-### channel-user-remove
+### channel_user_remove
 
 - username: string
 
-### channel-update-admin
+### channel_update_admin
 
 - username: string
 - value: number
@@ -83,12 +83,12 @@ Join a channel and request its contents
 The last action send was successful!
 This will be sent if the action doesnt respond with a packet by default.
 
-### channel-list
+### channel_list
 
 - channels: A
 - name: string
 
-### channel-update-admin
+### channel_update_admin
 
 - username: string
 - value: number
