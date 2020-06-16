@@ -1,8 +1,8 @@
 import { User, onlineUsers } from "./user"
 import { dbcon } from "./database";
 import WebSocket from "ws"
-import { timestamp, SHA256, getChannel, dataAssertType, s_ok, s_error } from './utils';
-import { Channel } from "./channel";
+import { timestamp, SHA256, getChannel, dataAssertType, s_ok, s_error, getUser } from './utils';
+import { Channel } from './channel';
 
 export function sendPacketRaw(ws: WebSocket, pname: string, pdata: Object){
     var j = JSON.stringify(pdata)
@@ -99,6 +99,63 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
     message: async (user, data) => {
         if(dataAssertType(user.ws, data.message, "string","Please send a message not nothing")) return
         user.sendMessage(data.message)
+    },
+    channel_create: async (user, data) => {
+        if (dataAssertType(user.ws,data.name,"string","A name for the channel is required.")) return
+        var ex_channel = await dbcon.collection("channel").findOne({name: data.name})
+        if (ex_channel) return s_error(user.ws,"A channel with this name already exists")
+        await dbcon.collection("channel").insertOne({
+            name: data.name,
+            users: [user.username]
+        })
+        var ch = await getChannel(data.name)
+        ch?.addUser(user)
+        user.joinChannel(data.name)
+        await user.sendChannelList()
+    },
+    channel_remove: async (user, data) => {
+        if (dataAssertType(user.ws,data.name,"string","A name for the channel is required.")) return
+        var ch_ex = await dbcon.collection("channel").findOne({name: data.name})
+        if (!ch_ex) return s_error(user.ws,"A channel with this name does not exist")
+        var ch = await getChannel(data.name)
+        if (ch?.adminUsers.findIndex(u => u == user.username) == -1){
+            return s_error(user.ws, "You need to be an admin in this channel, in order to delete it.")
+        }
+        if (!ch?.users) {
+            return s_error(user.ws, "This channel is not initialized the right way... Muffin probably forgot a await somewhere again. :(")
+        }
+        for (const uname of ch?.users) {
+            var u = await getUser(uname)
+            if (!u) continue
+            ch.removeUser(u)
+        }
+        ch?.unload() // Force unload
+        await dbcon.collection("channel").deleteOne({name: data.name})
+        s_ok(user.ws)
+    },
+    channel_user_add: async (user, data) => {
+        if (dataAssertType(user.ws,data.username,"string","A username for the user to add to the channel is required.")) return
+        if (dataAssertType(user.ws,data.channel,"string","A channel name is required.")) return
+        var ch = await getChannel(data.channel)
+        if (!ch) return s_error(user.ws, "The channel cannot be found.")
+        var u = await getUser(data.username)
+        if (!u) return s_error(user.ws, "The user cannot be found")
+        ch.addUser(u)
+        if (u.ws) u.sendChannelList()
+        s_ok(user.ws)
+    },
+    channel_user_remove: async (user, data) => {
+        if (dataAssertType(user.ws,data.username,"string","A username for the user to add to the channel is required.")) return
+        if (dataAssertType(user.ws,data.channel,"string","A channel name is required.")) return
+        var ch = await getChannel(data.channel)
+        if (!ch) return s_error(user.ws, "The channel cannot be found.")
+        var u = await getUser(data.username)
+        if (!u) return s_error(user.ws, "The user cannot be found")
+        if (!ch.users.includes(data.username)) return s_error(user.ws,"The user is not in this channel.")
+        if (!(ch.adminUsers.includes(data.username) || user.username == u.username)) return s_error(user.ws,"You are not allowed to do this. You need to be an admin to remove anybody except for youself")
+        ch.removeUser(u)
+        if (u.ws) u.sendChannelList()
+        s_ok(user.ws)
     },
     login: async (user,data) => {}, // Just a placeholder. userLogin will be called instead because a User object needs to be created to handle a normal packet
     register: async (user,data) => {}

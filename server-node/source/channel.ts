@@ -8,6 +8,7 @@ export var loadedChannels:Array<Channel> = []
 export class Channel {
     public name: string = ""
     public users: Array<string> = []
+    public adminUsers: Array<string> = []
     public activeUsers: Array<User> = []
     public messageHistory: Array<Message> = []
 
@@ -56,5 +57,15 @@ export class Channel {
         var end = Math.max(0,Math.min(this.messageHistory.length,offset))
         console.log(`Reading Messages from ${start} to ${end}.`);
         return this.messageHistory.slice(start,end + 1)
+    }
+
+    public async addUser(user: User) {
+        this.users.push(user.username);
+        user.channels.push(this.name)
+    }
+    public async removeUser(user: User) {
+        user.channels.splice(user.channels.findIndex(c => c == this.name))
+        this.users.splice(this.users.findIndex(u => u == user.username))
+        this.adminUsers.splice(this.adminUsers.findIndex(u => u == user.username))
     }
 }

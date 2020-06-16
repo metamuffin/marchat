@@ -44,7 +44,8 @@ export async function dataAssertType(ws: WebSocket | undefined, data:any, type: 
     return true
 }
 
-export function s_ok(ws: WebSocket){
+export function s_ok(ws: WebSocket | undefined){
+    if (!ws) return console.log(`Skipped ok for offline user.`)
     sendPacketRaw(ws,"ok",{})
 }
 

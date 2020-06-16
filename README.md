@@ -35,13 +35,16 @@ Responses: error or ok
 ### channel_user_add
 
 - username: string
+- channel: name
 
 ### channel_user_remove
 
 - username: string
+- channel: string
 
 ### channel_update_admin
 
+- channel: string
 - username: string
 - value: number
     1. Raise priveleges of this user to full access of this channel
@@ -94,6 +97,7 @@ This will be sent if the action doesnt respond with a packet by default.
 - value: number
     1. Raise priveleges of this user to full access of this channel
     0. Remove All Privileges of this userrray of String - *All channels the user joined*
+    
 ### error
 
 - message: string
