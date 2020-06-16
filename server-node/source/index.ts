@@ -42,7 +42,8 @@ app.ws("/ws",(ws,req) => {
             } finally {
                 if (!user && packet_name == "login") {
                     user = await userLogin(ws,j)
-                    console.log(`Logging in user: ${user?.username}`);
+                    if (!user) return
+                    console.log(`Logging in user: ${user.username}`);
                 } else {
                     // the if here is only for ts
                     if (user) await packets[packet_name](user,j);

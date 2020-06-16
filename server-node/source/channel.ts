@@ -1,7 +1,7 @@
 import { User } from "./user"
 import { dbcon } from "./database"
 import { Message } from "./message"
-import { broadcastPacket } from "./packets"
+import { broadcastPacket, sendPacket } from "./packets"
 
 export var loadedChannels:Array<Channel> = []
 
@@ -67,5 +67,16 @@ export class Channel {
         user.channels.splice(user.channels.findIndex(c => c == this.name))
         this.users.splice(this.users.findIndex(u => u == user.username))
         this.adminUsers.splice(this.adminUsers.findIndex(u => u == user.username))
+    }
+
+    public async sendUpdate(user: User, count: number, offset: number){
+        var msgs = await this.fetchMessages(count,offset)
+        sendPacket(user,"channel",{
+            current_message_number: this.messageHistory.length,
+            history: msgs,
+            users: this.users,
+            admin_users: this.adminUsers,
+        })
+    
     }
 }

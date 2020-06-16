@@ -30,7 +30,7 @@ export function broadcastPacket(users:Array<User>, pname: string, pdata: Object)
     }
 }
 
-export async function userLogin(ws: WebSocket, data:any): Promise<undefined | User | void> {
+export async function userLogin(ws: WebSocket, data:any): Promise<undefined | User> {
     
     if (await dataAssertType(ws,data.username,"string","You need to specify a username to log in with.")) return
     if (await dataAssertType(ws,data.password,"string","You need to specify a password to log in with.")) return
@@ -39,16 +39,20 @@ export async function userLogin(ws: WebSocket, data:any): Promise<undefined | Us
 
     var user = await dbcon.collection("user").findOne({username: data.username})
     if (!user) {
-        return s_error(ws, "User not found.")
+        s_error(ws, "User not found.")
+        return
     }
     if (!((timestamp() - 10) <= data.timestamp)) {
-        return s_error(ws, "Your timestamp is too old.")
+        s_error(ws, "Your timestamp is too old.")
+        return
     }
     if (user.password != data.password) {
-        return s_error(ws, "Your password does not match.")
+        s_error(ws, "Your password does not match.")
+        return
     }
     if (SHA256(user.password + " " + data.timestamp.toString()) != data.anti_replay) {
-        return s_error(ws, "Replay protection cant let you through.")
+        s_error(ws, "Replay protection cant let you through.")
+        return
     }
     var newuser = new User(data.username)
     await newuser.initializeOnline(ws)

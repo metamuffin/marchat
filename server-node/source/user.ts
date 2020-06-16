@@ -76,11 +76,7 @@ export class User {
     }
 
     public async sendChannelUpdate(count:number, offset: number){
-        var msgs = await this.currentChannel?.fetchMessages(count,offset)
-        sendPacket(this,"channel",{
-            current_message_number: this.currentChannel?.messageHistory.length,
-            history: msgs
-        })
+        await this.currentChannel?.sendUpdate(this,count,offset)
     }
 
     public async sendChannelList(){

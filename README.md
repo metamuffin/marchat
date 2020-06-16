@@ -97,7 +97,7 @@ This will be sent if the action doesnt respond with a packet by default.
 - value: number
     1. Raise priveleges of this user to full access of this channel
     0. Remove All Privileges of this userrray of String - *All channels the user joined*
-    
+
 ### error
 
 - message: string
@@ -115,6 +115,8 @@ This will be sent if the action doesnt respond with a packet by default.
 ### channel
 
 - current_message_number: number - *number of newest message*
+- users: Array of String (Usernames)
+- admin_users: Array of Strings (Usernames)
 - history: Array
     - username: string
     - text: string
