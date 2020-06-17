@@ -4,16 +4,17 @@ import expressWs from "express-ws";
 import { User } from "./user";
 import { connectDB } from "./database";
 import { packets, userLogin, userRegister } from "./packets";
+import WebSocket from "ws"
 
 export var packet_split_regex:RegExp = /(?<pname>.+):(?<pdata>.+)/ig
+
 
 // Create a express webserver
 var _app = express();
 // Add websocket support
 var app = expressWs(_app).app
 
-// Handle requests to /ws and upgrade the connection to websockets
-app.ws("/ws",(ws,req) => {
+const wsHandler = (ws: WebSocket,req: any) => {
     console.log("[CON_OPEN]");
     var user: User | undefined = undefined;
     // Receive data
@@ -68,7 +69,11 @@ app.ws("/ws",(ws,req) => {
         console.log("[CON_CLOSE]");
         
     })
-})
+}
+
+// Handle requests to /ws and upgrade the connection to websockets
+app.ws("/ws", wsHandler)
+app.ws("/",wsHandler)
 
 app.use(express.static(__dirname + "/../../client-web/"))
 
