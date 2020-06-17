@@ -36,7 +36,7 @@ export async function getChannel(name:string): Promise<Channel | undefined> {
 }
 
 // Returns true if there is an error
-export async function dataAssertType(ws: WebSocket | undefined, data:any, type: string, error: string){
+export function dataAssertType(ws: WebSocket | undefined, data:any, type: string, error: string){
     if (data && typeof data == type) {
         return false
     }

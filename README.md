@@ -138,3 +138,5 @@ export const secrets = {
     mongo_password: "brrr"
 }
 ```
+
+Running the java client requires additional files and requirements. See /client-java/README.md for details.
