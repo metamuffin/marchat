@@ -21,10 +21,7 @@ void startWS(){
     Codec<String, String> codec = utf8.fuse(base64);
     debugPrint(codec.decode(msg));
   });
-
 }
-
-
 
 void sendPacket(String packetName,Map<String,dynamic> packetData){
   Codec<String, String> codec = utf8.fuse(base64);

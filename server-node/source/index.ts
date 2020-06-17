@@ -3,7 +3,7 @@ import express from "express";
 import expressWs from "express-ws";
 import { User } from "./user";
 import { connectDB } from "./database";
-import { packets, userLogin } from "./packets";
+import { packets, userLogin, userRegister } from "./packets";
 
 export var packet_split_regex:RegExp = /(?<pname>.+):(?<pdata>.+)/ig
 
@@ -28,22 +28,26 @@ app.ws("/ws",(ws,req) => {
         var packet_data:string = matches?.groups?.pdata || ""
         */
         var [packet_name, packet_data] = sdata.split(":")
-        console.log(`[P] ${packet_name} -> ${packet_data}`);
         
-
+        
         if (packets.hasOwnProperty(packet_name)){
             var j:Object = {};
             var packet_data_decoded = Buffer.from(packet_data, "base64").toString()
             try {
                 j = JSON.parse(packet_data_decoded);
-                console.log(j);
+                console.log(`[RECV] ${packet_name} -> ${j}`);
             } catch (e) {
                 console.log(`Invalid JSON: ${packet_data}`);
             } finally {
-                if (!user && packet_name == "login") {
-                    user = await userLogin(ws,j)
-                    if (!user) return
-                    console.log(`Logging in user: ${user.username}`);
+                if (!user) {
+                    if (packet_name == "login"){
+                        user = await userLogin(ws,j)
+                        if (!user) return
+                        console.log(`Logging in user: ${user.username}`);
+                    } else if (packet_name == "register"){
+                        await userRegister(ws,j)
+                        console.log(`Registered a user.`);
+                    }
                 } else {
                     // the if here is only for ts
                     if (user) await packets[packet_name](user,j);
