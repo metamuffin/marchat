@@ -23,8 +23,8 @@ import javax.xml.bind.DatatypeConverter;
 public class Client {
 
 	public static boolean loggedIn = false;
-	//final static String uri = "ws://marchat.zapto.org:5555/ws";
-	final static String uri = "ws://25.86.154.196:5555/ws";
+	final static String uri = "ws://marchat.zapto.org:5555/ws";
+	//final static String uri = "ws://25.86.154.196:5555/ws";
     final static CountDownLatch messageLatch = new CountDownLatch(1);
     
     public static Session ServerSession;

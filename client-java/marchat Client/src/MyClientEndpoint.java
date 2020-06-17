@@ -41,6 +41,17 @@ public class MyClientEndpoint {
          		System.out.println("logged in succesfully");
          		Client.loggedIn = true;
          		Login.closeLoginScreen();
+         	}else if(message.startsWith("message")) {
+         		String msg = Encoding.Base64decode(pckgCont);
+         		
+         		String[] split =  msg.split(":", 2);
+         		msg = split[1];
+         		msg = msg.substring(1, msg.length() - 2);
+         		
+         		//Login.wrongPasswordLabel.setText(msg);
+         		String titleBar = "Message from Server";
+         		Client.showInfoBox(titleBar, msg);
+         		Login.clearInputs();
          	}else {
          		Client.loggedIn = false;
          		//System.out.println("Wrong password or username");
@@ -53,7 +64,6 @@ public class MyClientEndpoint {
          		
          		//Login.wrongPasswordLabel.setText(msg);
          		String titleBar = "Error";
-         		String infoMessage = msg;
          		Client.showInfoBox(titleBar, msg);
          		Login.clearInputs();
          	}
