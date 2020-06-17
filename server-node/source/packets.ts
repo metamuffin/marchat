@@ -32,10 +32,10 @@ export function broadcastPacket(users:Array<User>, pname: string, pdata: Object)
 
 export async function userLogin(ws: WebSocket, data:any): Promise<undefined | User> {
     
-    if (await dataAssertType(ws,data.username,"string","You need to specify a username to log in with.")) return
-    if (await dataAssertType(ws,data.password,"string","You need to specify a password to log in with.")) return
-    if (await dataAssertType(ws,data.anti_replay,"string","You need to specify the anti-replay hash.")) return
-    if (await dataAssertType(ws,data.timestamp,"number","You need to specify the timestamp that you hashed your password hash with.")) return
+    if (dataAssertType(ws,data.username,"string","You need to specify a username to log in with.")) return
+    if (dataAssertType(ws,data.password,"string","You need to specify a password to log in with.")) return
+    if (dataAssertType(ws,data.anti_replay,"string","You need to specify the anti-replay hash.")) return
+    if (dataAssertType(ws,data.timestamp,"number","You need to specify the timestamp that you hashed your password hash with.")) return
 
     var user = await dbcon.collection("user").findOne({username: data.username})
     if (!user) {
@@ -63,16 +63,18 @@ export async function userLogin(ws: WebSocket, data:any): Promise<undefined | Us
 export async function userRegister(ws: WebSocket, data:any){
     if (dataAssertType(ws,data.username,"string","You need to specify a username to log in with.")) return
     if (dataAssertType(ws,data.username,"string","You need to specify a password to log in with.")) return
-    if (data.password.length < 8){
-        return s_error(ws,"Your password is way too short.")
+    if (data.password.length < 64){
+        return s_error(ws,"Your password hash is way too short.")
     }
-    if (data.password.length > 50){
-        return s_error(ws,"Your password is too secure.")
+    if (data.password.length > 64){
+        return s_error(ws,"Your password hash is way too long.")
     }
     var ex_user = await dbcon.collection("user").findOne({username: data.username})
     if (ex_user?.username) {
         return s_error(ws,"This user is already existing.")
     }
+    console.log(`Username: ${data.username} Password: ${data.password}`);
+    
     dbcon.collection("user").insertOne({
         username: data.username,
         password: data.password,
@@ -80,6 +82,8 @@ export async function userRegister(ws: WebSocket, data:any){
     }, (err) => {
         if (err)
             return s_error(ws,"Database stuff failed somehow... please report this!");
+        console.log("Database transaction done!");
+            
         return s_ok(ws);
     })
 }

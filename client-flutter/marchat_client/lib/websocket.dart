@@ -15,7 +15,8 @@ IOWebSocketChannel wsc;
 EventEmitter wse = EventEmitter();
 
 void startWS(){
-  wsc = IOWebSocketChannel.connect("ws://192.168.0.10:5555/ws");
+  debugPrint("Connecting WS");
+  wsc = IOWebSocketChannel.connect("ws://192.168.178.23:5555");
   wsc.stream.listen((msg) {
     debugPrint(msg);
     Codec<String, String> codec = utf8.fuse(base64);

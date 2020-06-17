@@ -20,7 +20,7 @@ const wsHandler = (ws: WebSocket,req: any) => {
     // Receive data
     ws.on("message",async (data) => {
         var sdata:string = data.toString()
-        console.log(sdata);
+        //console.log(sdata);
 
         /*var matches:RegExpMatchArray|null = (packet_split_regex).exec(sdata)
         console.log(matches);
@@ -36,7 +36,7 @@ const wsHandler = (ws: WebSocket,req: any) => {
             var packet_data_decoded = Buffer.from(packet_data, "base64").toString()
             try {
                 j = JSON.parse(packet_data_decoded);
-                console.log(`[RECV] ${packet_name} -> ${j}`);
+                console.log(`[RECV] ${packet_name} -> ${JSON.stringify(j)}`);
             } catch (e) {
                 console.log(`Invalid JSON: ${packet_data}`);
             } finally {
