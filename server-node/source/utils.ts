@@ -51,5 +51,5 @@ export function s_ok(ws: WebSocket | undefined){
 
 export function s_error(ws: WebSocket | undefined, msg: string){
     if (!ws) return console.log(`Skipped error for offline user: "${msg}"`)
-    sendPacketRaw(ws,"message",{message: msg})
+    sendPacketRaw(ws,"error",{message: msg})
 }

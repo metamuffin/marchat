@@ -20,7 +20,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void runLogin(){
     sendPacket("login", {
-      "username": usernameController.text
+      "username": usernameController.text,
+      "password": sha256String(passwordController.text),
+      "anti_replay": sha256String(sha256String(passwordController.toString()) + " " + unixTimestamp().toString()),
+      "timestamp": unixTimestamp(),
     });
   }
 
@@ -30,32 +33,37 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text("Marchat Login"),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                labelText: "Username"
-              ),
-              controller: usernameController,
+      body: Builder(
+        builder: (context) {
+          globContext = context;
+          return Center(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    labelText: "Username"
+                  ),
+                  controller: usernameController,
+                ),
+                SizedBox(height: 20,),
+                TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    labelText: "Password"
+                  ),
+                  controller: passwordController,
+                ),
+                SizedBox(height: 30,),
+                FlatButton(
+                  onPressed: runLogin,
+                  child: Text("Login"),
+                )
+              ],
             ),
-            SizedBox(height: 20,),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                labelText: "Password"
-              ),
-              controller: passwordController,
-            ),
-            SizedBox(height: 30,),
-            FlatButton(
-              onPressed: runLogin,
-              child: Text("Login"),
-            )
-          ],
-        ),
+          );
+        }
       ),
     );
   }
