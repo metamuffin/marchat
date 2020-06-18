@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:marchat_client/main.dart';
 import 'package:marchat_client/websocket.dart';
@@ -22,7 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
       mainPageState.setState(() {
         mainPageState.state = PageState.Normal;
       });
-      wse.emit("channel-list", data);
+      new Timer(Duration(milliseconds: 500), (){
+        wse.emit("channel-list", data);
+      });
     });
   }
 

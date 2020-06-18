@@ -79,6 +79,5 @@ export class Channel {
             users: this.users,
             admin_users: this.adminUsers,
         })
-    
     }
 }

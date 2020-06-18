@@ -22,6 +22,8 @@ final marchatTheme = ThemeData(
   cardColor: greyM,
 
   brightness: Brightness.dark,
+  bottomAppBarColor: greyM,
+  backgroundColor: greyD,
 
   snackBarTheme: SnackBarThemeData(
     actionTextColor: greenL,

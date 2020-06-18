@@ -8,6 +8,7 @@ import 'package:web_socket_channel/io.dart';
 
 IOWebSocketChannel wsc;
 EventEmitter wse = EventEmitter();
+EventEmitter oke = EventEmitter();
 
 BuildContext globContext;
 
@@ -30,6 +31,9 @@ void startWS(){
   wse.on("error", (data) {
     showError(data["message"]);
   });
+  wse.on("ok", (data) {
+    oke.emit(data["packet"],null);
+  });
 }
 
 void showError(String message){
@@ -42,7 +46,6 @@ void showError(String message){
 void parsePacket(String packet){
   Codec<String, String> codec = utf8.fuse(base64);
   List<String> packetSplit = packet.split(":");
-  debugPrint(packetSplit.toString());
   String packetName, packetData;
   packetName = packetSplit[0];
   try {

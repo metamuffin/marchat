@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:marchat_client/channel-add.dart';
 import 'package:marchat_client/message.dart';
 import 'package:marchat_client/websocket.dart';
 
@@ -21,12 +22,17 @@ class _ChatViewState extends State<ChatView> {
   String currentChannel;
 
   _ChatViewState(){
-    wse.on("channel-list", (data) => {
-      channels = data["channels"]
+    wse.on("channel-list", (data) {
+      debugPrint(data);
+      setState(() {
+        debugPrint("Blub1 ${data.channels[0]}");
+        channels = data["channels"];
+      });
     });
   }
 
   void fetchMessages(int start, int length){
+    if (currentChannel == null) return
     sendPacket("channel", {
       "name": currentChannel,
       "offset": start,
@@ -34,7 +40,12 @@ class _ChatViewState extends State<ChatView> {
     });
   }
 
+  void addChannel(){
+    
+  }
+
   Widget chatBuilder(BuildContext context){
+    globContext = context;
 
     return ListView.builder(
       itemCount: maxMsgNumber + 1,
@@ -60,6 +71,9 @@ class _ChatViewState extends State<ChatView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(currentChannel ?? "No Channel"),
+        actions: <Widget>[
+          ChannelAddUIButton()
+        ],
       ),
       drawer: Drawer(
         child: ListView.builder(
