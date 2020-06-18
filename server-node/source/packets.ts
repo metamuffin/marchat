@@ -57,6 +57,7 @@ export async function userLogin(ws: WebSocket, data:any): Promise<undefined | Us
     var newuser = new User(data.username)
     await newuser.initializeOnline(ws)
     await newuser.sendChannelList();
+    s_ok(ws, "login")
     return newuser
 }
 
@@ -84,7 +85,7 @@ export async function userRegister(ws: WebSocket, data:any){
             return s_error(ws,"Database stuff failed somehow... please report this!");
         console.log("Database transaction done!");
             
-        return s_ok(ws);
+        return s_ok(ws, "register");
     })
 }
 
@@ -107,6 +108,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
     message: async (user, data) => {
         if(dataAssertType(user.ws, data.message, "string","Please send a message not nothing")) return
         user.sendMessage(data.message)
+        s_ok(user.ws, "message")
     },
     channel_create: async (user, data) => {
         if (dataAssertType(user.ws,data.name,"string","A name for the channel is required.")) return
@@ -120,6 +122,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         ch?.addUser(user)
         user.joinChannel(data.name)
         await user.sendChannelList()
+        s_ok(user.ws,"channel_create")
     },
     channel_remove: async (user, data) => {
         if (dataAssertType(user.ws,data.name,"string","A name for the channel is required.")) return
@@ -139,7 +142,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         }
         ch?.unload() // Force unload
         await dbcon.collection("channel").deleteOne({name: data.name})
-        s_ok(user.ws)
+        s_ok(user.ws, "channel_remove")
     },
     channel_user_add: async (user, data) => {
         if (dataAssertType(user.ws,data.username,"string","A username for the user to add to the channel is required.")) return
@@ -150,7 +153,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (!u) return s_error(user.ws, "The user cannot be found")
         ch.addUser(u)
         if (u.ws) u.sendChannelList()
-        s_ok(user.ws)
+        s_ok(user.ws, "channel_user_add")
     },
     channel_user_remove: async (user, data) => {
         if (dataAssertType(user.ws,data.username,"string","A username for the user to add to the channel is required.")) return
@@ -163,7 +166,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (!(ch.adminUsers.includes(data.username) || user.username == u.username)) return s_error(user.ws,"You are not allowed to do this. You need to be an admin to remove anybody except for youself")
         ch.removeUser(u)
         if (u.ws) u.sendChannelList()
-        s_ok(user.ws)
+        s_ok(user.ws, "channel_user_remove")
     },
     login: async (user,data) => {}, // Just a placeholder. userLogin will be called instead because a User object needs to be created to handle a normal packet
     register: async (user,data) => {}

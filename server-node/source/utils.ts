@@ -44,12 +44,12 @@ export function dataAssertType(ws: WebSocket | undefined, data:any, type: string
     return true
 }
 
-export function s_ok(ws: WebSocket | undefined){
+export function s_ok(ws: WebSocket | undefined, msg: string){
     if (!ws) return console.log(`Skipped ok for offline user.`)
-    sendPacketRaw(ws,"ok",{})
+    sendPacketRaw(ws,"ok",{packet: msg})
 }
 
 export function s_error(ws: WebSocket | undefined, msg: string){
     if (!ws) return console.log(`Skipped error for offline user: "${msg}"`)
-    sendPacketRaw(ws,"message",{message: msg})
+    sendPacketRaw(ws,"error",{message: msg})
 }
