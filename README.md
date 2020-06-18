@@ -71,20 +71,12 @@ Join a channel and request its contents
 
 ## Server-bound Packets
 
-### login
-
-- status: number
-    1. OK
-    2. User not existing
-    3. Password incorrect
-    4. Timestamp wrong
-    5. Connection throttled (reconnected too fast ( < 20s ))
-- channel: string - *name of the channel the user starts in*
-
 ### ok
 
 The last action send was successful!
 This will be sent if the action doesnt respond with a packet by default.
+
+- packet: string - *The name of the packet that was successfully processed by the server*
 
 ### channel_list
 
