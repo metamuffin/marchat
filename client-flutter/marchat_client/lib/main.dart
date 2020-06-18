@@ -23,7 +23,7 @@ class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  MainPageState createState() => MainPageState();
 }
 
 enum PageState {
@@ -32,8 +32,15 @@ enum PageState {
   Error
 }
 
-class _MainPageState extends State<MainPage> {
+MainPageState mainPageState;
+
+class MainPageState extends State<MainPage> {
+
   PageState state = PageState.Login;
+  
+  MainPageState(){
+    mainPageState = this;
+  }
 
   @override
   Widget build(BuildContext context) {

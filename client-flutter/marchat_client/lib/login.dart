@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:marchat_client/main.dart';
 import 'package:marchat_client/websocket.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,13 +17,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _LoginScreenState(){
     startWS();
+    wse.on("channel-list",(data) {
+      wse.off("channel-list");
+      mainPageState.setState(() {
+        mainPageState.state = PageState.Normal;
+      });
+      wse.emit("channel-list", data);
+    });
   }
 
   void runLogin(){
     sendPacket("login", {
       "username": usernameController.text,
       "password": sha256String(passwordController.text),
-      "anti_replay": sha256String(sha256String(passwordController.toString()) + " " + unixTimestamp().toString()),
+      "anti_replay": sha256String(sha256String(passwordController.text) + " " + unixTimestamp().toString()),
       "timestamp": unixTimestamp(),
     });
   }

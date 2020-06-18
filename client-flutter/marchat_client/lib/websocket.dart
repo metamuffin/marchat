@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
@@ -16,6 +10,16 @@ IOWebSocketChannel wsc;
 EventEmitter wse = EventEmitter();
 
 BuildContext globContext;
+
+void loginDummy(){
+  sendPacket("login", {
+    "username": "dummy",
+    "password": sha256String("dummy"),
+    "anti_replay": sha256String(sha256String("dummy") + " " + unixTimestamp().toString()),
+    "timestamp": unixTimestamp(),
+  });
+}
+
 
 void startWS(){
   debugPrint("Connecting WS");
@@ -31,7 +35,7 @@ void startWS(){
 void showError(String message){
   Scaffold.of(globContext).showSnackBar(SnackBar(
     content: Text(message),
-    action: SnackBarAction(label: "Ignore", onPressed: null),
+    action: SnackBarAction(label: "Ignore", onPressed: (){}),
   ));
 }
 
@@ -68,5 +72,5 @@ String sha256String(String a){
 }
 
 int unixTimestamp(){
-  return (DateTime.now().toUtc().millisecondsSinceEpoch / 100).floor();
+  return (DateTime.now().toUtc().millisecondsSinceEpoch / 1000).floor();
 }

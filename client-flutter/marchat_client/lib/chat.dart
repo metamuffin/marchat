@@ -1,6 +1,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:marchat_client/message.dart';
+import 'package:marchat_client/websocket.dart';
 
 class ChatView extends StatefulWidget {
   ChatView({Key key}) : super(key: key);
@@ -10,12 +12,65 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
+
+  final int messageBulkLoadCount = 10;
+
+  List<String> channels = [];
+  Map<int, MessageView> messages = {};
+  int maxMsgNumber = 0;
+  String currentChannel;
+
+  _ChatViewState(){
+    wse.on("channel-list", (data) => {
+      channels = data["channels"]
+    });
+  }
+
+  void fetchMessages(int start, int length){
+    sendPacket("channel", {
+      "name": currentChannel,
+      "offset": start,
+      "count": length
+    });
+  }
+
+  Widget chatBuilder(BuildContext context){
+
+    return ListView.builder(
+      itemCount: maxMsgNumber + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index < maxMsgNumber) {
+          if (messages.containsKey(index)){
+            return messages[index];
+          } else {
+            return MessageView(number: 0,text: "Oh no",username: "I am an error!",);
+          }
+        } else {
+          fetchMessages(index, messageBulkLoadCount);
+          return LinearProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+          );
+        }
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("blub"),
+        title: Text(currentChannel ?? "No Channel"),
       ),
+      drawer: Drawer(
+        child: ListView.builder(
+          itemCount: channels.length,
+          itemBuilder: (context, int index) =>
+            Card(
+              child: Text(channels[index]),
+            )
+        ),
+      ),
+      body: Builder(builder: chatBuilder,)
     );
   }
 }
