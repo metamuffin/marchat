@@ -72,12 +72,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.example.hello
-        pluginClass: HelloPlugin
-      ios:
-        pluginClass: HelloPlugin
