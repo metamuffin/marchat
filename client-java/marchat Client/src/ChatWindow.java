@@ -16,7 +16,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 
 public class ChatWindow extends JFrame {
-
+	public JPanel contentPanel;
 	/**
 	 * Launch the application.
 	 */
@@ -37,7 +37,16 @@ public class ChatWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public ChatWindow(JSONObject channelList) {
-		
+		UpdateChannelList(channelList);
+		setResizable(false);
+		setTitle("marchat");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1080, 720);
+		contentPanel = new JPanel();
+		contentPanel.setBackground(OwnColors.grey_d);
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPanel);
 	}
 
 	
