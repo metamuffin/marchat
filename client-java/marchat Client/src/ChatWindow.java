@@ -60,6 +60,8 @@ public class ChatWindow extends JFrame {
 	
 	public void UpdateChannelList(JSONObject channelList) {
 		
+		//Login.client.sendChannelCreate("test");
+		//Login.client.SendChannelUserAdd("test2", "test");
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		

@@ -27,6 +27,10 @@ public class Client {
 	//final static String uri = "ws://25.86.154.196:5555/ws";
     final static CountDownLatch messageLatch = new CountDownLatch(1);
     
+    public static String username = "";
+    public static String currentChannel = "";
+    
+    
     public static Session ServerSession;
 
     public static void connectToServer() {
@@ -50,6 +54,9 @@ public class Client {
             
             System.out.println("Sending message to endpoint: " + loginB64);
             ServerSession.getBasicRemote().sendText(loginB64);
+            
+            this.username = username;
+            
             return true;
         } catch (IOException ex) {
             Logger.getLogger(MyClientEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,6 +80,33 @@ public class Client {
             return false;
         } 
     }
+    
+    public void SendChannelUserAdd(String username, String channelName) {
+    	try {
+    	 String channelUserAdd = "{\"username\":\"" + username + "\",\"channel\":\"" + channelName + "\"}";
+    	 String channelUserAddB64 = "channel_user_add:" + Encoding.Base64encode(channelUserAdd);
+    	 
+    	 System.out.println("Sending message to endpoint: " + channelUserAddB64);
+    	 
+			ServerSession.getBasicRemote().sendText(channelUserAddB64);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void sendChannelCreate(String name) {
+    	try {
+       	 String channel_create = "{\"name\":\"" + name + "\"}";
+       	 String channel_createAddB64 = "channel_create:" + Encoding.Base64encode(channel_create);
+       	 
+       	 System.out.println("Sending message to endpoint: " + channel_createAddB64);
+       	 
+   			ServerSession.getBasicRemote().sendText(channel_createAddB64);
+   		} catch (IOException e) {
+   			e.printStackTrace();
+   		}
+    }
+    
     
     
     public static void showInfoBox(String title, String msg) {
