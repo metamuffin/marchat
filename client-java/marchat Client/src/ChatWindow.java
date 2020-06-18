@@ -5,20 +5,32 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Window.Type;
+import org.json.*;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.AbstractListModel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JButton;
+import javax.swing.JSplitPane;
+import javax.swing.JScrollBar;
+import javax.swing.JLabel;
+import java.awt.ScrollPane;
+import java.awt.Panel;
+import java.awt.Point;
 
 public class ChatWindow extends JFrame {
-
-	private JPanel contentPanel;
-
+	public JPanel contentPanel;
 	/**
 	 * Launch the application.
 	 */
-	public static void startChat() {
+	public static void startChat(JSONObject channelList) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChatWindow frame = new ChatWindow();
+					ChatWindow frame = new ChatWindow(channelList);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,7 +42,8 @@ public class ChatWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChatWindow() {
+	public ChatWindow(JSONObject channelList) {
+		UpdateChannelList(channelList);
 		setResizable(false);
 		setTitle("marchat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,8 +51,26 @@ public class ChatWindow extends JFrame {
 		contentPanel = new JPanel();
 		contentPanel.setBackground(OwnColors.grey_d);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPanel.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPanel);
+		contentPanel.setLayout(null);
+		
+	
 	}
 
+	
+	public void UpdateChannelList(JSONObject channelList) {
+		
+		JSONArray channels = channelList.getJSONArray("channels");
+		System.out.println(channels);
+		
+		for(int i = 0; i < channels.length(); i++) {
+			JButton btnNewButton = new JButton(channels.getString(i));
+			btnNewButton.setBounds(10, 11 + i * 34, 89, 23);
+			contentPanel.add(btnNewButton);
+		}
+		
+		//String [] splitted = channelList.split(":");
+	   
+		
+	}
 }

@@ -9,6 +9,8 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
+import org.json.JSONObject;
+
 @ClientEndpoint
 public class MyClientEndpoint {
 	
@@ -35,39 +37,42 @@ public class MyClientEndpoint {
     	String pckgName = splitMsg[0];
     	String pckgCont = splitMsg[1];
     	
+    	JSONObject obj = new JSONObject(Encoding.Base64decode(pckgCont));
+    	
          if(!Client.loggedIn) {
          	if(message.startsWith("channel-list")) {
-         		ChatWindow.startChat();
+         		ChatWindow.startChat(obj);
          		System.out.println("logged in succesfully");
          		Client.loggedIn = true;
          		Login.closeLoginScreen();
-         	}else if(message.startsWith("message")) {
-         		String msg = Encoding.Base64decode(pckgCont);
-         		
-         		String[] split =  msg.split(":", 2);
-         		msg = split[1];
-         		msg = msg.substring(1, msg.length() - 2);
-         		
-         		//Login.wrongPasswordLabel.setText(msg);
-         		String titleBar = "Message from Server";
-         		Client.showInfoBox(titleBar, msg);
-         		Login.clearInputs();
-         	}else {
+         	}else if(message.startsWith("ok")) {}
+         	else {
          		Client.loggedIn = false;
-         		//System.out.println("Wrong password or username");
-         		String msg = Encoding.Base64decode(pckgCont);
-         		//Login.wrongPasswordLabel.setText("Wrong password or username!");
+         		String msg = obj.getString("message");
          		
-         		String[] split =  msg.split(":", 2);
-         		msg = split[1];
-         		msg = msg.substring(1, msg.length() - 2);
-         		
-         		//Login.wrongPasswordLabel.setText(msg);
          		String titleBar = "Error";
          		Client.showInfoBox(titleBar, msg);
          		Login.clearInputs();
          	}
-         }
+         }else if(message.startsWith("message")) {
+      		String msg = obj.getString("message");
+     		
+      		String titleBar = "Message from Server";
+      		//Client.showInfoBox(titleBar, msg);
+      		
+      		
+      	}
+        
+        if(message.startsWith("ok")) {
+      		
+      		if(obj.getString("packet").equals("register")) {
+      		Client.showInfoBox("Message from server", "Success!");
+      		RegisterWindow.closeRegisterScreen();
+      		Login.showLoginScreen();
+      		}else if (obj.getString("packet").equals("login")) {
+      			System.out.println("Logged in succesfully");
+      		}
+      	}
     	
         Client.messageLatch.countDown();
     }
