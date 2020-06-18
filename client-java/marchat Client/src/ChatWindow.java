@@ -14,6 +14,12 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
+import javax.swing.JSplitPane;
+import javax.swing.JScrollBar;
+import javax.swing.JLabel;
+import java.awt.ScrollPane;
+import java.awt.Panel;
+import java.awt.Point;
 
 public class ChatWindow extends JFrame {
 	public JPanel contentPanel;
@@ -45,8 +51,10 @@ public class ChatWindow extends JFrame {
 		contentPanel = new JPanel();
 		contentPanel.setBackground(OwnColors.grey_d);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPanel.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPanel);
+		contentPanel.setLayout(null);
+		
+	
 	}
 
 	
@@ -54,6 +62,12 @@ public class ChatWindow extends JFrame {
 		
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
+		
+		for(int i = 0; i < channels.length(); i++) {
+			JButton btnNewButton = new JButton(channels.getString(i));
+			btnNewButton.setBounds(10, 11 + i * 34, 89, 23);
+			contentPanel.add(btnNewButton);
+		}
 		
 		//String [] splitted = channelList.split(":");
 	   
