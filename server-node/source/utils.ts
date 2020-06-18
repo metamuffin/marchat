@@ -17,7 +17,7 @@ export async function getUser(username:string): Promise<User | undefined> {
     var user: User | undefined = loadedUsers.find(u => u.username == username)
     if (!user) {
         var dbuser = await dbcon.collection("user").findOne({username: username})
-        if (!dbuser) return
+        if (!dbuser) return undefined
         user = new User(username)
         await user.initialize()
         return user
