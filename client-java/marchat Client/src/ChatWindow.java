@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Window.Type;
+import org.json.*;
 
 public class ChatWindow extends JFrame {
 
@@ -14,11 +15,11 @@ public class ChatWindow extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void startChat() {
+	public static void startChat(JSONObject channelList) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChatWindow frame = new ChatWindow();
+					ChatWindow frame = new ChatWindow(channelList);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,7 +31,8 @@ public class ChatWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChatWindow() {
+	public ChatWindow(JSONObject channelList) {
+		UpdateChannelList(channelList);
 		setResizable(false);
 		setTitle("marchat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,4 +44,14 @@ public class ChatWindow extends JFrame {
 		setContentPane(contentPanel);
 	}
 
+	
+	public void UpdateChannelList(JSONObject channelList) {
+		
+		JSONArray channels = channelList.getJSONArray("channels");
+		System.out.println(channels);
+		
+		//String [] splitted = channelList.split(":");
+		
+	}
+	
 }

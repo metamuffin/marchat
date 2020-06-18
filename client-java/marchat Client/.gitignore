@@ -56,9 +56,4 @@ local.properties
 .worksheet
 
 
-/javax.websocket-api-1.1.jar
-/jgoodies-forms-1.8.0.jar
-/jgoodies-forms-1.8.0-sources.jar
-/miglayout15-swing.jar
-/miglayout-src.zip
-/tyrus-standalone-client-1.9.jar
+*.jar

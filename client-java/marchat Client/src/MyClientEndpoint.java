@@ -9,6 +9,8 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
+import org.json.JSONObject;
+
 @ClientEndpoint
 public class MyClientEndpoint {
 	
@@ -35,9 +37,11 @@ public class MyClientEndpoint {
     	String pckgName = splitMsg[0];
     	String pckgCont = splitMsg[1];
     	
+    	JSONObject obj = new JSONObject(Encoding.Base64decode(pckgCont));
+    	
          if(!Client.loggedIn) {
          	if(message.startsWith("channel-list")) {
-         		ChatWindow.startChat();
+         		ChatWindow.startChat(obj);
          		System.out.println("logged in succesfully");
          		Client.loggedIn = true;
          		Login.closeLoginScreen();
