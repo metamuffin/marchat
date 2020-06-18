@@ -19,9 +19,16 @@ final marchatTheme = ThemeData(
     bodyText1: TextStyle(color: Colors.white),
     caption: TextStyle(color: greenL)
   ),
+  cardColor: greyM,
 
   brightness: Brightness.dark,
+  bottomAppBarColor: greyM,
+  backgroundColor: greyD,
 
+  snackBarTheme: SnackBarThemeData(
+    actionTextColor: greenL,
+    backgroundColor: greyL,
+  ),
 
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );

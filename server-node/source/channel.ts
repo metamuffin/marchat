@@ -21,6 +21,7 @@ export class Channel {
         var data = await dbcon.collection("channel").findOne({name: this.name})
         this.name = data.name
         this.users = data.users
+        this.adminUsers = data.adminUsers
         this.messageHistory = data.messageHistory
         
     }
@@ -29,6 +30,7 @@ export class Channel {
         return {
             name: this.name,
             users: this.users,
+            adminUsers: this.adminUsers,
             messageHistory: this.messageHistory
         }
     }
@@ -77,6 +79,5 @@ export class Channel {
             users: this.users,
             admin_users: this.adminUsers,
         })
-    
     }
 }

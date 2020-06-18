@@ -14,7 +14,7 @@ class EventEmitter {
     events.remove(name);
   }
   void emit(String name, dynamic data){
-    if (!events.containsKey(name)) debugPrint("Ohno! EventEmitter goes brrrrr: $name");
+    if (!events.containsKey(name)) return debugPrint("Ohno! EventEmitter goes brrrrr: $name");
     events[name](data);
   }
 }
