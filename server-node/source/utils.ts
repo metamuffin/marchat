@@ -20,8 +20,8 @@ export async function getUser(username:string): Promise<User | undefined> {
         if (!dbuser) return undefined
         user = new User(username)
         await user.initialize()
-        return user
     }
+    return user
 }
 
 export async function getChannel(name:string): Promise<Channel | undefined> {
@@ -31,8 +31,8 @@ export async function getChannel(name:string): Promise<Channel | undefined> {
         if (!dbuser) return
         channel = new Channel(name)
         await channel.initialize()
-        return channel
     }
+    return channel
 }
 
 // Returns true if there is an error
