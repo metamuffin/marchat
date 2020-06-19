@@ -28,6 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
         wse.emit("channel-list", data);
       });
     });
+    oke.on("login",(data) {
+      oke.off("login");
+      mainPageState.setState(() {
+        mainPageState.state = PageState.Normal;
+      });
+    });
   }
 
   void runLogin(){

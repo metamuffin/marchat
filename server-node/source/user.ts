@@ -49,7 +49,7 @@ export class User {
         loadedUsers.splice(loadedUsers.findIndex(u => u.username == this.username))
         this.currentChannel?.activeUsers?.splice(this.currentChannel.activeUsers.findIndex(c => c.username == this.username))
         if ((this.currentChannel?.activeUsers?.length || 0) < 1) {
-            this.currentChannel?.unload()
+            if (this.currentChannel) this.currentChannel?.unload()
         }
         var j = this.dump()
         console.log(j);

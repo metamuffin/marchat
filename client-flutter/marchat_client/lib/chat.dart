@@ -23,10 +23,9 @@ class _ChatViewState extends State<ChatView> {
 
   _ChatViewState(){
     wse.on("channel-list", (data) {
-      debugPrint(data);
       setState(() {
-        debugPrint("Blub1 ${data.channels[0]}");
-        channels = data["channels"];
+        channels = List<String>.from(data["channels"]);
+        //debugPrint("Blub1 ${channels.join(", ")}");
       });
     });
   }
@@ -79,8 +78,13 @@ class _ChatViewState extends State<ChatView> {
         child: ListView.builder(
           itemCount: channels.length,
           itemBuilder: (context, int index) =>
-            Card(
-              child: Text(channels[index]),
+            ListTile(
+              onTap: (){
+                setState(() {
+                  currentChannel = channels[index];
+                });
+              },
+              title: Text(channels[index], style: Theme.of(context).textTheme.bodyText1,),
             )
         ),
       ),
