@@ -116,7 +116,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (ex_channel) return s_error(user.ws,"A channel with this name already exists")
         await dbcon.collection("channel").insertOne({
             name: data.name,
-            users: [user.username]
+            users: []
         })
         var ch = await getChannel(data.name)
         ch?.addUser(user)
