@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import java.awt.ScrollPane;
 import java.awt.Panel;
 import java.awt.Point;
+import java.awt.Button;
 
 public class ChatWindow extends JFrame {
 	public JPanel contentPanel;
@@ -51,31 +52,36 @@ public class ChatWindow extends JFrame {
 		contentPanel = new JPanel();
 		contentPanel.setBackground(OwnColors.grey_d);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
 		setContentPane(contentPanel);
 		contentPanel.setLayout(null);
 		
-	
-	}
-
-	
-	public void UpdateChannelList(JSONObject channelList) {
-		
-		//Login.client.sendChannelCreate("test");
-		//Login.client.SendChannelUserAdd("test", "test");
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		
 		String[] channelsTest = {"test1", "test2", "test3"};
 		
-		
-		for(int i = 0; i < channelsTest.length; i++) {
-			JButton btnNewButton = new JButton(channelsTest[i]);
-			btnNewButton.setBounds(10, 11 + i * 34, 89, 23);
+		for(int i = 0; i < channels.length(); i++) {
+			Button btnNewButton = new Button("#" + channels.getString(i));
+			btnNewButton.setBounds(10, 11, 238, 23);
 			contentPanel.add(btnNewButton);
 		}
 		
-		//String [] splitted = channelList.split(":");
-	   
+		JPanel panel = new JPanel();
+		panel.setBackground(OwnColors.grey_m);
+		panel.setBounds(0, 0, 262, 691);
+		contentPanel.add(panel);
+	}
+
+	
+	public void UpdateChannelList(JSONObject channelList) {
 		
+		JSONArray channels = channelList.getJSONArray("channels");
+		System.out.println(channels);
+		
+		String[] channelsTest = {"test1", "test2", "test3"};
+		
+		//Login.client.SendChannelUserAdd("test", "test");
+		//Login.client.sendChannelCreate("marchat-welcome-test");
 	}
 }

@@ -98,7 +98,7 @@ public class RegisterWindow extends JFrame {
 		
 		JLabel lblRepeatPassword = new JLabel("Repeat password");
 		lblRepeatPassword.setForeground(Color.WHITE);
-		lblRepeatPassword.setBounds(56, 160, 96, 20);
+		lblRepeatPassword.setBounds(48, 160, 112, 20);
 		contentPanel.add(lblRepeatPassword);
 		
 		lblErrormsg = new JLabel("");
@@ -107,7 +107,7 @@ public class RegisterWindow extends JFrame {
 		lblErrormsg.setBounds(0, 187, 444, 14);
 		contentPanel.add(lblErrormsg);
 		
-		JButton btnBackToSign = new JButton("back to sign in");
+		JButton btnBackToSign = new JButton("Back to sign in");
 		btnBackToSign.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
