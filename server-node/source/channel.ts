@@ -19,10 +19,10 @@ export class Channel {
     public async initialize() {
         console.log(`Loading channel: ${this.name}`);
         var data = await dbcon.collection("channel").findOne({name: this.name})
-        this.name = data.name
-        this.users = data.users
-        this.adminUsers = data.adminUsers
-        this.messageHistory = data.messageHistory
+        this.name = data.name || "Ohnoerror"
+        this.users = data.users || []
+        this.adminUsers = data.adminUsers || []
+        this.messageHistory = data.messageHistory || []
         
     }
 
