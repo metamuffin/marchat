@@ -21,6 +21,10 @@ import java.awt.ScrollPane;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Button;
+import javax.swing.JEditorPane;
+import javax.swing.DropMode;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ChatWindow extends JFrame {
 	public JPanel contentPanel;
@@ -71,6 +75,22 @@ public class ChatWindow extends JFrame {
 		panel.setBackground(OwnColors.grey_m);
 		panel.setBounds(0, 0, 262, 691);
 		contentPanel.add(panel);
+		
+		JEditorPane dtrpnEnterMessage = new JEditorPane();
+		dtrpnEnterMessage.setDropMode(DropMode.INSERT);
+		dtrpnEnterMessage.setBounds(285, 646, 693, 23);
+		contentPanel.add(dtrpnEnterMessage);
+		
+		JButton btnSend = new JButton("Send");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Login.client.SendMessage(dtrpnEnterMessage.getText());
+				
+			}
+		});
+		btnSend.setBounds(988, 646, 65, 23);
+		contentPanel.add(btnSend);
 	}
 
 	
