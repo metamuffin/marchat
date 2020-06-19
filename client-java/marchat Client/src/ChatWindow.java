@@ -60,11 +60,16 @@ public class ChatWindow extends JFrame {
 	
 	public void UpdateChannelList(JSONObject channelList) {
 		
+		//Login.client.sendChannelCreate("test");
+		//Login.client.SendChannelUserAdd("test", "test");
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		
-		for(int i = 0; i < channels.length(); i++) {
-			JButton btnNewButton = new JButton(channels.getString(i));
+		String[] channelsTest = {"test1", "test2", "test3"};
+		
+		
+		for(int i = 0; i < channelsTest.length; i++) {
+			JButton btnNewButton = new JButton(channelsTest[i]);
 			btnNewButton.setBounds(10, 11 + i * 34, 89, 23);
 			contentPanel.add(btnNewButton);
 		}

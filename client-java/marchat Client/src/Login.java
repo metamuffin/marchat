@@ -33,10 +33,11 @@ import java.awt.Window.Type;
 
 public class Login extends JFrame {
   private static final JPanel contentPanel = new JPanel();
-  private static JTextField username;
+  private static JTextField usernameTxtField;
   private static JPasswordField password;
   public static Label wrongPasswordLabel;
   public static Login dialog;
+  
   
   public static Client client = new Client();
   /**
@@ -45,6 +46,7 @@ public class Login extends JFrame {
   
   
   public static void main(String[] args) {
+	  
     try {
       dialog = new Login(true);
       dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -55,6 +57,8 @@ public class Login extends JFrame {
   }
   
   public static void main() {
+	 
+	  
 	    try {
 	      dialog = new Login(false);
 	      dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -82,10 +86,10 @@ public class Login extends JFrame {
     getContentPane().add(contentPanel, BorderLayout.CENTER);
     contentPanel.setLayout(null);
     {
-      JLabel lblUsername = new JLabel("Username");
-      lblUsername.setForeground(Color.WHITE);
-      lblUsername.setBounds(89, 76, 63, 20);
-      contentPanel.add(lblUsername);
+      JLabel lblusernameTxtField = new JLabel("usernameTxtField");
+      lblusernameTxtField.setForeground(Color.WHITE);
+      lblusernameTxtField.setBounds(89, 76, 63, 20);
+      contentPanel.add(lblusernameTxtField);
     }
     {
       JLabel lblPassword = new JLabel("Password");
@@ -94,10 +98,10 @@ public class Login extends JFrame {
       contentPanel.add(lblPassword);
     }
     
-    username = new JTextField();
-    username.setBounds(173, 76, 152, 20);
-    contentPanel.add(username);
-    username.setColumns(10);
+    usernameTxtField = new JTextField();
+    usernameTxtField.setBounds(173, 76, 152, 20);
+    contentPanel.add(usernameTxtField);
+    usernameTxtField.setColumns(10);
     
     password = new JPasswordField();
     password.setBounds(173, 119, 152, 20);
@@ -108,13 +112,13 @@ public class Login extends JFrame {
     	
       public void actionPerformed(ActionEvent arg0) {
     	  
-    	  if(tryLogin(username.getText(), password.getText())) {
+    	  if(tryLogin(usernameTxtField.getText(), password.getText())) {
     		  
     	  }else {
     		 
     
     	  }
-        /*if(username.getText().equals("HELLO") && password.getText().equals("WORLD") ) {
+        /*if(usernameTxtField.getText().equals("HELLO") && password.getText().equals("WORLD") ) {
           JOptionPane.showMessageDialog(null, "Login Sucessful ");
           
         }else
@@ -151,8 +155,8 @@ public class Login extends JFrame {
     contentPanel.add(wrongPasswordLabel);
   }
   
-  private boolean tryLogin(String username, String password) {
-	  return client.SendLogin(username, password);
+  private boolean tryLogin(String usernameTxtField, String password) {
+	  return client.SendLogin(usernameTxtField, password);
   }
   
   public static void closeLoginScreen() {
@@ -164,7 +168,7 @@ public class Login extends JFrame {
   }
   
   public static void clearInputs() {
-	  username.setText("");
+	  usernameTxtField.setText("");
 	  password.setText("");
   }
   
