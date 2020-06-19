@@ -65,6 +65,7 @@ export class Channel {
         this.users.push(user.username);
         user.channels.push(this.name)
     }
+
     public async removeUser(user: User) {
         user.channels.splice(user.channels.findIndex(c => c == this.name))
         this.users.splice(this.users.findIndex(u => u == user.username))

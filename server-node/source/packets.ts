@@ -152,6 +152,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (!ch) return s_error(user.ws, "The channel cannot be found.")
         var u = await getUser(data.username)
         if (!u) return s_error(user.ws, "The user cannot be found")
+        if (ch.users.includes(u.username)) return s_error(user.ws, "The User is already in this channel.")
         await ch.addUser(u)
         if (u.ws) u.sendChannelList()
         s_ok(user.ws, "channel_user_add")
