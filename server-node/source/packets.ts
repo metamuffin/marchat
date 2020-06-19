@@ -120,6 +120,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         })
         var ch = await getChannel(data.name)
         ch?.addUser(user)
+        ch?.adminUsers.push(user.username)
         user.joinChannel(data.name)
         await user.sendChannelList()
         s_ok(user.ws,"channel_create")
@@ -151,7 +152,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (!ch) return s_error(user.ws, "The channel cannot be found.")
         var u = await getUser(data.username)
         if (!u) return s_error(user.ws, "The user cannot be found")
-        ch.addUser(u)
+        await ch.addUser(u)
         if (u.ws) u.sendChannelList()
         s_ok(user.ws, "channel_user_add")
     },
@@ -164,7 +165,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (!u) return s_error(user.ws, "The user cannot be found")
         if (!ch.users.includes(data.username)) return s_error(user.ws,"The user is not in this channel.")
         if (!(ch.adminUsers.includes(data.username) || user.username == u.username)) return s_error(user.ws,"You are not allowed to do this. You need to be an admin to remove anybody except for youself")
-        ch.removeUser(u)
+        await ch.removeUser(u)
         if (u.ws) u.sendChannelList()
         s_ok(user.ws, "channel_user_remove")
     },
