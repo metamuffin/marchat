@@ -39,9 +39,7 @@ class _ChatViewState extends State<ChatView> {
     });
   }
 
-  void addChannel(){
-    
-  }
+  
 
   Widget chatBuilder(BuildContext context){
     globContext = context;
@@ -83,8 +81,10 @@ class _ChatViewState extends State<ChatView> {
                 setState(() {
                   currentChannel = channels[index];
                 });
+                Navigator.pop(context);
               },
               title: Text(channels[index], style: Theme.of(context).textTheme.bodyText1,),
+              leading: Icon(Icons.message),
             )
         ),
       ),

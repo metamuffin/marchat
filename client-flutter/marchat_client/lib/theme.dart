@@ -27,7 +27,7 @@ final marchatTheme = ThemeData(
 
   snackBarTheme: SnackBarThemeData(
     actionTextColor: greenL,
-    backgroundColor: greyL,
+    backgroundColor: greyD,
   ),
 
   visualDensity: VisualDensity.adaptivePlatformDensity,
