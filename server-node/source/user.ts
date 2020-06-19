@@ -72,7 +72,6 @@ export class User {
         }
         this.currentChannel = channel
         this.currentChannel?.activeUsers.push(this)
-        
     }
 
     public async sendChannelUpdate(count:number, offset: number){

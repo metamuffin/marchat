@@ -121,7 +121,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         var ch = await getChannel(data.name)
         ch?.addUser(user)
         ch?.adminUsers.push(user.username)
-        user.joinChannel(data.name)
+        if (ch) user.joinChannel(ch)
         await user.sendChannelList()
         s_ok(user.ws,"channel_create")
     },
