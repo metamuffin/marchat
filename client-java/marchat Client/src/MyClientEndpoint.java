@@ -70,6 +70,9 @@ public class MyClientEndpoint {
       		RegisterWindow.closeRegisterScreen();
       		Login.showLoginScreen();
       		}else if (obj.getString("packet").equals("login")) {
+      			
+      			//Login.client.
+      			
       		}
       	}else if(message.startsWith("error")){
      		String msg = obj.getString("message");

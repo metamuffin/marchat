@@ -86,7 +86,7 @@ public class Login extends JFrame {
     getContentPane().add(contentPanel, BorderLayout.CENTER);
     contentPanel.setLayout(null);
     {
-      JLabel lblusernameTxtField = new JLabel("usernameTxtField");
+      JLabel lblusernameTxtField = new JLabel("Username");
       lblusernameTxtField.setForeground(Color.WHITE);
       lblusernameTxtField.setBounds(89, 76, 63, 20);
       contentPanel.add(lblusernameTxtField);
@@ -112,12 +112,7 @@ public class Login extends JFrame {
     	
       public void actionPerformed(ActionEvent arg0) {
     	  
-    	  if(tryLogin(usernameTxtField.getText(), password.getText())) {
-    		  
-    	  }else {
-    		 
-    
-    	  }
+    	  tryLogin(usernameTxtField.getText(), password.getText());
         /*if(usernameTxtField.getText().equals("HELLO") && password.getText().equals("WORLD") ) {
           JOptionPane.showMessageDialog(null, "Login Sucessful ");
           

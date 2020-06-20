@@ -107,6 +107,18 @@ public class Client {
    		}
     }
     
+    public void SendMessage(String message) {
+    	try {
+          	 String msg = "{\"message\":\"" + message + "\"}";
+          	 String msgB64 = "message:" + Encoding.Base64encode(msg);
+          	 
+          	 System.out.println("Sending message to endpoint: " + msgB64);
+          	 
+      			ServerSession.getBasicRemote().sendText(msgB64);
+      		} catch (IOException e) {
+      			e.printStackTrace();
+      		}
+    }
     
     
     public static void showInfoBox(String title, String msg) {
