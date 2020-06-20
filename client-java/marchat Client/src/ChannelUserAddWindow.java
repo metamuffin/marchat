@@ -1,21 +1,21 @@
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.Color;
-import javax.swing.JTextField;
-import javax.swing.DropMode;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Dialog.ModalityType;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CreateChannelWindow extends JDialog {
+import javax.swing.DropMode;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+public class ChannelUserAddWindow extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
@@ -23,9 +23,9 @@ public class CreateChannelWindow extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void start() {
+	public static void main(String[] args) {
 		try {
-			CreateChannelWindow dialog = new CreateChannelWindow();
+			ChannelUserAddWindow dialog = new ChannelUserAddWindow();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -36,7 +36,7 @@ public class CreateChannelWindow extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateChannelWindow() {
+	public ChannelUserAddWindow() {
 		setResizable(false);
 		setModalityType(ModalityType.DOCUMENT_MODAL);
 		setTitle("Create channel");
@@ -54,11 +54,11 @@ public class CreateChannelWindow extends JDialog {
 		contentPanel.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblEnterAName = new JLabel("Enter a name for the channel:");
+		JLabel lblEnterAName = new JLabel("Enter the name of the user you want to add to the channel:");
 		lblEnterAName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblEnterAName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEnterAName.setForeground(Color.WHITE);
-		lblEnterAName.setBounds(84, 55, 255, 30);
+		lblEnterAName.setBounds(10, 55, 414, 30);
 		contentPanel.add(lblEnterAName);
 		{
 			JPanel buttonPane = new JPanel();
@@ -69,7 +69,7 @@ public class CreateChannelWindow extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						Login.client.sendChannelCreate(textField.getText());
+						Login.client.chatWindow.ChannelUserAdd(textField.getText());
 						setVisible(false);
 					}
 				});
@@ -90,4 +90,5 @@ public class CreateChannelWindow extends JDialog {
 			}
 		}
 	}
+
 }

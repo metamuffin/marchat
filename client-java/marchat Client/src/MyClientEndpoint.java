@@ -39,9 +39,41 @@ public class MyClientEndpoint {
     	
     	JSONObject obj = new JSONObject(Encoding.Base64decode(pckgCont));
     	
-         if(!Client.loggedIn) {
+        
+        if(message.startsWith("ok:")) {
+      		
+      		if(obj.getString("packet").equals("register")) {
+      		Client.showInfoBox("Message from server", "Success!");
+      		RegisterWindow.closeRegisterScreen();
+      		Login.showLoginScreen();
+      		}else if (obj.getString("packet").equals("login")) {
+      			
+      			//Login.client.
+      		}else if(obj.getString("packet").equals("channel_user_add")) {
+      		}else if(obj.getString("packet").equals("channel_create")) {
+      		}
+      		
+      	}else if(message.startsWith("error:")){
+     		String msg = obj.getString("message");
+     		
+     		String titleBar = "Error";
+     		Client.showInfoBox(titleBar, msg);
+     	}else if(message.startsWith("channel:")){
+     		Client.chatWindow.JoinChannelUI(Client.currentChannelTryToJoin);
+     	}else if (message.startsWith("message:")) {
+     		String user = obj.getString("username");
+     		String msg = obj.getString("text");
+     		System.out.println("Received message from " + user + ": " + msg);
+     	}else if(message.startsWith("channel-list:") && Client.loggedIn) {
+     		Client.activeChannelList = obj;
+  			Client.chatWindow.UpdateChannelList(Client.activeChannelList, Client.currentChannelTryToJoin);
+     	}
+    	
+        
+        if(!Client.loggedIn) {
          	if(message.startsWith("channel-list")) {
          		ChatWindow.startChat(obj);
+         		Client.activeChannelList = obj;
          		System.out.println("logged in succesfully");
          		Client.loggedIn = true;
          		Login.closeLoginScreen();
@@ -55,37 +87,6 @@ public class MyClientEndpoint {
          		Login.clearInputs();
          	}
          }
-        
-        if(message.startsWith("ok:")) {
-      		
-      		if(obj.getString("packet").equals("register")) {
-      		Client.showInfoBox("Message from server", "Success!");
-      		RegisterWindow.closeRegisterScreen();
-      		Login.showLoginScreen();
-      		}else if (obj.getString("packet").equals("login")) {
-      			
-      			//Login.client.
-      		}else if(obj.getString("packet").equals("channel_user_add")) {
-      			Client.chatWindow.JoinChannelUI();
-      			
-      		}else if(obj.getString("packet").equals("channel_create")) {
-      			Client.chatWindow.JoinChannelUI();
-      			
-      		}
-      		
-      	}else if(message.startsWith("error:")){
-     		String msg = obj.getString("message");
-     		
-     		String titleBar = "Error";
-     		Client.showInfoBox(titleBar, msg);
-     	}else if(message.startsWith("channel:")){
-     		Client.chatWindow.JoinChannelUI();
-     	}else if (message.startsWith("message:")) {
-     		String user = obj.getString("username");
-     		String msg = obj.getString("text");
-     		System.out.println("Received message from " + user + ": " + msg);
-     	}
-    	
         Client.messageLatch.countDown();
     }
 

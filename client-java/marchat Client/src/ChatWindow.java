@@ -34,7 +34,9 @@ public class ChatWindow extends JFrame {
 	private JLabel lblNoChannel;
 	private JEditorPane dtrpnEnterMessage;
 	private JButton btnSend_1;
-	
+	private Button[] allChannelButtons = new Button[1000];
+	private JLabel lblCurrentChannel;
+	private JButton btnAddUserTo;
 	/**
 	 * Launch the application.
 	 * @return 
@@ -44,7 +46,7 @@ public class ChatWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChatWindow frame = new ChatWindow(channelList);
+					ChatWindow frame = new ChatWindow(channelList, "");
 					frame.setVisible(true);
 					Client.chatWindow = frame;
 				} catch (Exception e) {
@@ -57,8 +59,8 @@ public class ChatWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChatWindow(JSONObject channelList) {
-		UpdateChannelList(channelList);
+	public ChatWindow(JSONObject channelList, String channelToJoin) {
+
 		setResizable(false);
 		setTitle("marchat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,13 +75,10 @@ public class ChatWindow extends JFrame {
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		
-		String[] channelsTest = {"test1", "test2", "test3"};
-		
-		
 		for(int i = 0; i < channels.length(); i++) {
 			Button btnNewButton = new Button("#" + channels.getString(i));
 			btnNewButton.setBounds(10, 11 + i * 34, 238, 23);
-			
+			allChannelButtons[i] = btnNewButton;
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String channelName = btnNewButton.getLabel().substring(1);
@@ -102,7 +101,7 @@ public class ChatWindow extends JFrame {
 				CreateChannelWindow.start();
 			}
 		});
-		btnCreateNewChannel.setBounds(61, 657, 129, 23);
+		btnCreateNewChannel.setBounds(52, 657, 154, 23);
 		panel.add(btnCreateNewChannel);
 		
 		dtrpnEnterMessage = new JEditorPane();
@@ -131,18 +130,50 @@ public class ChatWindow extends JFrame {
 		lblNoChannel.setBounds(265, 307, 809, 32);
 		contentPanel.add(lblNoChannel);
 		
+		lblCurrentChannel = new JLabel("");
+		lblCurrentChannel.setForeground(Color.WHITE);
+		lblCurrentChannel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCurrentChannel.setBounds(272, 11, 519, 23);
+		contentPanel.add(lblCurrentChannel);
+		
+		btnAddUserTo = new JButton("Add user to channel");
+		btnAddUserTo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ChannelUserAddWindow().setVisible(true);;
+			}
+		});
+		btnAddUserTo.setBounds(910, 11, 0, 0);
+		contentPanel.add(btnAddUserTo);
+		
+		if(!channelToJoin.equals("")) {
+			JoinChannelUI(channelToJoin);
+		}
 	}
 
 	
-	public void UpdateChannelList(JSONObject channelList) {
+	public void UpdateChannelList(JSONObject channelList, String channelToJoin) {
+		setVisible(false);
+		System.out.println("Update channnel list");
+		ChatWindow newChat = new ChatWindow(channelList, channelToJoin);
+		Client.chatWindow = newChat;
+		newChat.setVisible(true);
 		//Login.client.SendChannelUserAdd("test2", "marchat-welcome");
 		//Login.client.sendChannelCreate("marchat-welcome-test");
 	}
 	
-	public void JoinChannelUI() {
+	public void JoinChannelUI(String channelName) {
+		lblCurrentChannel.setText("Current channel: " + channelName);
+		Client.currentChannel = Client.currentChannelTryToJoin;
 		System.out.println("Joined Channel UI");
 		dtrpnEnterMessage.setBounds(285, 646, 693, 23);
 		btnSend_1.setBounds(988, 646, 65, 23);
+		btnAddUserTo.setBounds(910, 11, 154, 23);
 		lblNoChannel.setText("");
 	}
+	
+	public void ChannelUserAdd(String nameOfUser) {
+		System.out.println(nameOfUser);
+		Login.client.SendChannelUserAdd(nameOfUser, Login.client.currentChannel);
+	}
+	
 }

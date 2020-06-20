@@ -20,6 +20,8 @@ import javax.websocket.WebSocketContainer;
 import java.security.MessageDigest;
 import javax.xml.bind.DatatypeConverter;
 
+import org.json.JSONObject;
+
 public class Client {
 
 	public static boolean loggedIn = false;
@@ -29,10 +31,12 @@ public class Client {
     
     public static String username = "";
     public static String currentChannel = "";
+    public static String currentChannelTryToJoin = "";
     
     public static ChatWindow chatWindow;
-    
+    public static JSONObject activeChannelList;
     public static Session ServerSession;
+    
 
     public static void connectToServer() {
         try {
@@ -89,7 +93,6 @@ public class Client {
     	 System.out.println("Sending message to endpoint: " + channelUserAddB64);
     	 
 			ServerSession.getBasicRemote().sendText(channelUserAddB64);
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -101,9 +104,8 @@ public class Client {
        	 String channel_createAddB64 = "channel_create:" + Encoding.Base64encode(channel_create);
        	 
        	 System.out.println("Sending message to endpoint: " + channel_createAddB64);
-       	 
+       	currentChannelTryToJoin = name;
    		ServerSession.getBasicRemote().sendText(channel_createAddB64);
-   		
    		} catch (IOException e) {
    			e.printStackTrace();
    		}
@@ -114,7 +116,7 @@ public class Client {
     	if(message.equals("")) { return; }
     	
     	try {
-          	 String msg = "{\"message\":\"" + message + "\"}";
+          	 String msg = "{\"text\":\"" + message + "\"}";
           	 String msgB64 = "message:" + Encoding.Base64encode(msg);
           	 
           	 System.out.println("Sending message to endpoint: " + msgB64);
@@ -131,7 +133,7 @@ public class Client {
          	 String channelJoinB64 = "channel:" + Encoding.Base64encode(channelJoin);
          	 
          	 System.out.println("Sending message to endpoint: " + channelJoinB64);
-         	 
+         	currentChannelTryToJoin = nameOfChannel;
      		ServerSession.getBasicRemote().sendText(channelJoinB64);
      		} catch (IOException e) {
      			e.printStackTrace();
