@@ -68,26 +68,29 @@ class _ChatViewState extends State<ChatView> {
   Widget chatBuilder(BuildContext context){
     globContext = context;
 
-    return ListView.builder(
-      reverse: true,
-      itemCount: maxMsgNumber + 1,
-      itemBuilder: (BuildContext context, int index) {
-        int msgIndex = (maxMsgNumber ?? 0) - index;
-        if (index < maxMsgNumber && index != -1) {
-          if (messages.containsKey(msgIndex)){
-            return messages[msgIndex];
+    return SizedBox(
+      height: 500,
+      child: ListView.builder(
+        reverse: true,
+        itemCount: maxMsgNumber + 1,
+        itemBuilder: (BuildContext context, int index) {
+          int msgIndex = (maxMsgNumber ?? 0) - index;
+          if (index < maxMsgNumber && index != -1) {
+            if (messages.containsKey(msgIndex)){
+              return messages[msgIndex];
+            } else {
+              return MessageView(number: 0,text: "Oh no",username: "I am an error!",);
+            }
           } else {
-            return MessageView(number: 0,text: "Oh no",username: "I am an error!",);
+            fetchMessages(msgIndex - messageBulkLoadCount, messageBulkLoadCount);
+            return LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+            );
           }
-        } else {
-          fetchMessages(msgIndex - messageBulkLoadCount, messageBulkLoadCount);
-          return LinearProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
-          );
         }
-      }
+      )
     );
-  }
+  }  
 
   void sendMessage(){
     sendPacket("message", {
@@ -157,14 +160,20 @@ class _ChatViewState extends State<ChatView> {
         ),
       ),
       body: Column(
+        textDirection: TextDirection.ltr,
         children: [
-          Builder(builder: chatBuilder,),
+          Expanded(
+            child: Builder(builder: chatBuilder,),
+          ),
           Row(
+            textDirection: TextDirection.ltr,
             children: [
-              TextField(
-                autocorrect: true,
-                autofocus: true,
-                controller: messageSendFieldController,
+              Expanded(
+                child: TextField(
+                  autocorrect: true,
+                  autofocus: true,
+                  controller: messageSendFieldController,
+                ),
               ),
               IconButton(icon: Icon(Icons.send), onPressed: sendMessage)
             ],
