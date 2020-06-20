@@ -79,6 +79,7 @@ export class User {
     }
 
     public async sendChannelList(){
+        console.log(`New channel list for ${this.username}`);
         sendPacket(this,"channel-list",{
             channels: this.channels
         })
