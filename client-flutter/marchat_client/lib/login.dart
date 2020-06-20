@@ -8,6 +8,8 @@ import 'package:marchat_client/websocket.dart';
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
 
+  static String username;
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -16,11 +18,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  //String targetHost = "marchat.zapto.org:5555";
+  //List<String> hostList = ["marchat.zapto.org:5555","127.0.0.1:5555"];
 
   _LoginScreenState(){
     startWS();
+
     wse.on("channel-list",(data) {
       wse.off("channel-list");
+      LoginScreen.username = usernameController.text;
       mainPageState.setState(() {
         mainPageState.state = PageState.Normal;
       });
@@ -30,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     oke.on("login",(data) {
       oke.off("login");
+      LoginScreen.username = usernameController.text;
       mainPageState.setState(() {
         mainPageState.state = PageState.Normal;
       });
@@ -47,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    globContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text("Marchat Login"),
@@ -57,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return Center(
             child: Column(
               children: <Widget>[
+                SizedBox(height: 20,),
                 TextField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),

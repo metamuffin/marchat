@@ -106,8 +106,8 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         await user.sendChannelUpdate(data.count,data.offset)
     },
     message: async (user, data) => {
-        if(dataAssertType(user.ws, data.message, "string","Please send a message not nothing")) return
-        user.sendMessage(data.message)
+        if(dataAssertType(user.ws, data.text, "string","You have to send something.")) return
+        user.sendMessage(data.text)
         s_ok(user.ws, "message")
     },
     channel_create: async (user, data) => {
@@ -149,12 +149,16 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (dataAssertType(user.ws,data.username,"string","A username for the user to add to the channel is required.")) return
         if (dataAssertType(user.ws,data.channel,"string","A channel name is required.")) return
         var ch = await getChannel(data.channel)
+        console.log(ch?.name);
+        console.log(ch?.users);
         if (!ch) return s_error(user.ws, "The channel cannot be found.")
         var u = await getUser(data.username)
+        console.log(u?.username);
+        console.log(u?.channels);
         if (!u) return s_error(user.ws, "The user cannot be found")
         if (ch.users.includes(u.username)) return s_error(user.ws, "The User is already in this channel.")
         await ch.addUser(u)
-        if (u.ws) u.sendChannelList()
+        if (u.ws) await u.sendChannelList()
         s_ok(user.ws, "channel_user_add")
     },
     channel_user_remove: async (user, data) => {
