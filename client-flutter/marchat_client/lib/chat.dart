@@ -34,10 +34,11 @@ class _ChatViewState extends State<ChatView> {
         //debugPrint("Blub1 ${channels.join(", ")}");
       });
     });
-    wse.on("channel", (data) => {
-      if (data.containsKey("history")){
+    wse.on("channel", (data) {
+      if (data.containsKey("history")) {
+        print(data.toString());
         for (var msg in data["history"]) {
-          addMessage(msg)
+          addMessage(msg);
         }
       }
     });
