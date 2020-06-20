@@ -21,6 +21,13 @@ final marchatTheme = ThemeData(
   ),
   cardColor: greyM,
 
+  buttonColor: greenL,
+  buttonTheme: ButtonThemeData(
+    buttonColor: greenL,
+    focusColor: greenD,
+    disabledColor: greyL, 
+  ),
+
   brightness: Brightness.dark,
   bottomAppBarColor: greyM,
   backgroundColor: greyD,

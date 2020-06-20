@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:marchat_client/channel-add.dart';
@@ -51,14 +53,13 @@ class _ChatViewState extends State<ChatView> {
     setState((){
       if (data.containsKey("text") && data.containsKey("number") && data.containsKey("username")){
         messages[data["number"]] = MessageView(number: data["number"], text: data["text"], username: data["username"]);
+        maxMsgNumber = max(maxMsgNumber, data["number"]);
       }
     });
   }
 
   void fetchMessages(int start, int length){
-    print("A");
     if (currentChannel == null) return
-    print("B");
     sendPacket("channel", {
       "name": currentChannel,
       "offset": start,
@@ -130,10 +131,12 @@ class _ChatViewState extends State<ChatView> {
                     content: Text("Do you want to delete or leave \"${channels[index]}\"?"),
                     actions: [
                       FlatButton(
+                        color: Theme.of(context).buttonColor,
                         child: Text("Nothing actually"),
                         onPressed: (){ Navigator.pop(context); },
                       ),
                       FlatButton(
+                        color: Theme.of(context).buttonColor,
                         child: Text("Just leave"),
                         onPressed: (){
                           sendPacket("channel_user_remove", {
@@ -143,9 +146,10 @@ class _ChatViewState extends State<ChatView> {
                         },
                       ),
                       FlatButton(
+                        color: Theme.of(context).buttonColor,
                         child: Text("DELETE!!!"),
                         onPressed: (){
-                          sendPacket("channel_delete", {
+                          sendPacket("channel_remove", {
                             "name": channels[index]
                           });
                           Navigator.pop(context);

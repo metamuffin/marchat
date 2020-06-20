@@ -107,7 +107,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
     },
     message: async (user, data) => {
         if(dataAssertType(user.ws, data.text, "string","You have to send something.")) return
-        user.sendMessage(data.text)
+        await user.sendMessage(data.text)
         s_ok(user.ws, "message")
     },
     channel_create: async (user, data) => {
@@ -140,6 +140,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
             var u = await getUser(uname)
             if (!u) continue
             ch.removeUser(u)
+            setTimeout(u.sendChannelList, 200);
         }
         ch?.unload() // Force unload
         await dbcon.collection("channel").deleteOne({name: data.name})

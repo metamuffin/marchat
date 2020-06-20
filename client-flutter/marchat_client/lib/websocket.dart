@@ -59,6 +59,7 @@ void parsePacket(String packet){
     showError("Uff. It seems like the server is too distorded to send us correct data.");
   }
   dynamic packetDataJ = json.decode(packetData);
+  debugPrint("PACKET_INCOMMING");
   debugPrint(packetName);
   debugPrint(packetData);
   wse.emit(packetName,packetDataJ);
@@ -69,6 +70,8 @@ void sendPacket(String packetName,Map<String,dynamic> packetData){
   String packetDataJson = jsonEncode(packetData);
   String packetDataEncoded = codec.encode(packetDataJson);
   String packet = packetName + ":" + packetDataEncoded;
+  debugPrint("PACKET_OUTGOING");
+  debugPrint(packetName);
   debugPrint(packetDataJson);
   wsc.sink.add(packet);
 }
