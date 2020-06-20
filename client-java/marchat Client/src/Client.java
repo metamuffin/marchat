@@ -30,6 +30,7 @@ public class Client {
     public static String username = "";
     public static String currentChannel = "";
     
+    public static ChatWindow chatWindow;
     
     public static Session ServerSession;
 
@@ -56,7 +57,6 @@ public class Client {
             ServerSession.getBasicRemote().sendText(loginB64);
             
             this.username = username;
-            
             return true;
         } catch (IOException ex) {
             Logger.getLogger(MyClientEndpoint.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,6 +89,7 @@ public class Client {
     	 System.out.println("Sending message to endpoint: " + channelUserAddB64);
     	 
 			ServerSession.getBasicRemote().sendText(channelUserAddB64);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -101,13 +102,17 @@ public class Client {
        	 
        	 System.out.println("Sending message to endpoint: " + channel_createAddB64);
        	 
-   			ServerSession.getBasicRemote().sendText(channel_createAddB64);
+   		ServerSession.getBasicRemote().sendText(channel_createAddB64);
+   		
    		} catch (IOException e) {
    			e.printStackTrace();
    		}
     }
     
     public void SendMessage(String message) {
+    	
+    	if(message.equals("")) { return; }
+    	
     	try {
           	 String msg = "{\"message\":\"" + message + "\"}";
           	 String msgB64 = "message:" + Encoding.Base64encode(msg);
@@ -118,6 +123,19 @@ public class Client {
       		} catch (IOException e) {
       			e.printStackTrace();
       		}
+    }
+    
+    public void SendJoinChannel(String nameOfChannel) {
+    	try {
+         	 String channelJoin = "{\"name\":\"" + nameOfChannel + "\", \"count\":10, \"offset\": -1}";
+         	 String channelJoinB64 = "channel:" + Encoding.Base64encode(channelJoin);
+         	 
+         	 System.out.println("Sending message to endpoint: " + channelJoinB64);
+         	 
+     		ServerSession.getBasicRemote().sendText(channelJoinB64);
+     		} catch (IOException e) {
+     			e.printStackTrace();
+     		}
     }
     
     

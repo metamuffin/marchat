@@ -54,16 +54,9 @@ public class MyClientEndpoint {
          		Client.showInfoBox(titleBar, msg);
          		Login.clearInputs();
          	}
-         }else if(message.startsWith("message")) {
-      		String msg = obj.getString("message");
-     		
-      		String titleBar = "Message from Server";
-      		//Client.showInfoBox(titleBar, msg);
-      		
-      		
-      	}
+         }
         
-        if(message.startsWith("ok")) {
+        if(message.startsWith("ok:")) {
       		
       		if(obj.getString("packet").equals("register")) {
       		Client.showInfoBox("Message from server", "Success!");
@@ -72,13 +65,25 @@ public class MyClientEndpoint {
       		}else if (obj.getString("packet").equals("login")) {
       			
       			//Login.client.
+      		}else if(obj.getString("packet").equals("channel_user_add")) {
+      			Client.chatWindow.JoinChannelUI();
+      			
+      		}else if(obj.getString("packet").equals("channel_create")) {
+      			Client.chatWindow.JoinChannelUI();
       			
       		}
-      	}else if(message.startsWith("error")){
+      		
+      	}else if(message.startsWith("error:")){
      		String msg = obj.getString("message");
      		
      		String titleBar = "Error";
      		Client.showInfoBox(titleBar, msg);
+     	}else if(message.startsWith("channel:")){
+     		Client.chatWindow.JoinChannelUI();
+     	}else if (message.startsWith("message:")) {
+     		String user = obj.getString("username");
+     		String msg = obj.getString("text");
+     		System.out.println("Received message from " + user + ": " + msg);
      	}
     	
         Client.messageLatch.countDown();
