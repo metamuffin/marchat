@@ -5,10 +5,11 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:marchat_client/event-emitter.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 IOWebSocketChannel wsc;
-EventEmitter wse = EventEmitter();
-EventEmitter oke = EventEmitter();
+EventEmitter<Map<String, dynamic>> wse = EventEmitter<Map<String, dynamic>>();
+EventEmitter<String> oke = EventEmitter<String>();
 
 BuildContext globContext;
 
@@ -24,7 +25,11 @@ void loginDummy(){
 
 void startWS(){
   debugPrint("Connecting WS");
-  wsc = IOWebSocketChannel.connect("ws://marchat.zapto.org:5555");
+  try {
+    wsc = IOWebSocketChannel.connect("ws://marchat.zapto.org:5555");
+  } catch (WebSocketChannelException) {
+    showError("Oh no... We cant connect you to the websocket service.");
+  }
   wsc.stream.listen((msg) {
     parsePacket(msg);
   });

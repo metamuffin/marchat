@@ -73,7 +73,9 @@ export class Channel {
     }
 
     public async sendUpdate(user: User, count: number, offset: number){
-        var msgs = await this.fetchMessages(count,offset)
+        var msgs = await (await this.fetchMessages(count,offset)).map((m) => {
+            
+        })
         sendPacket(user,"channel",{
             current_message_number: this.messageHistory.length,
             history: msgs,
