@@ -98,6 +98,7 @@ This will be sent if the action doesnt respond with a packet by default.
 
 - username: string
 - text: string
+- number: number
 
 ### status
 
