@@ -38,7 +38,6 @@ public class Login extends JFrame {
   public static Label wrongPasswordLabel;
   public static Login dialog;
   
-  
   public static Client client = new Client();
   /**
    * Launch the application.
@@ -148,6 +147,20 @@ public class Login extends JFrame {
     wrongPasswordLabel.setAlignment(Label.CENTER);
     wrongPasswordLabel.setBounds(10, 145, 424, 22);
     contentPanel.add(wrongPasswordLabel);
+    
+    JLabel lblCouldNotConnect = new JLabel("");
+    lblCouldNotConnect.setFont(new Font("Tahoma", Font.PLAIN, 13));
+    lblCouldNotConnect.setForeground(new Color(255, 0, 0));
+    lblCouldNotConnect.setHorizontalAlignment(SwingConstants.CENTER);
+    lblCouldNotConnect.setBounds(0, 230, 444, 30);
+    contentPanel.add(lblCouldNotConnect);
+    
+    if(!Client.connectedToServer) {
+    	btnSignUp.setEnabled(false);
+    	btnLogin.setEnabled(false);
+    	lblCouldNotConnect.setText("could not connect to the server, please try later again");
+    }
+    
   }
   
   private boolean tryLogin(String usernameTxtField, String password) {

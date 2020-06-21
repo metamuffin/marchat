@@ -25,8 +25,8 @@ import org.json.JSONObject;
 public class Client {
 
 	public static boolean loggedIn = false;
-	final static String uri = "ws://marchat.zapto.org:5555/ws";
-	//final static String uri = "ws://25.86.154.196:5555/ws";
+	//final static String uri = "ws://marchat.zapto.org:5555/ws";
+	final static String uri = "ws://25.86.154.196:5555/ws";
     final static CountDownLatch messageLatch = new CountDownLatch(1);
     
     public static String username = "";
@@ -36,6 +36,7 @@ public class Client {
     public static ChatWindow chatWindow;
     public static JSONObject activeChannelList;
     public static Session ServerSession;
+    public static boolean connectedToServer = false;
     
 
     public static void connectToServer() {
@@ -43,9 +44,12 @@ public class Client {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             System.out.println("Connecting to " + uri);
             container.connectToServer(MyClientEndpoint.class, URI.create(uri));
+            connectedToServer = true;
             //messageLatch.await(100, TimeUnit.SECONDS);
         } catch (DeploymentException /*| InterruptedException */| IOException ex) {
+        	System.out.println("connection failed");
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            connectedToServer = false;
         }
     }
     
