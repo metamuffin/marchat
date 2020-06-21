@@ -20,26 +20,23 @@ const wsHandler = (ws: WebSocket,req: any) => {
     // Receive data
     ws.on("message",async (data) => {
         var sdata:string = data.toString()
-        //console.log(sdata);
-
-        /*var matches:RegExpMatchArray|null = (packet_split_regex).exec(sdata)
-        console.log(matches);
         
-        var packet_name:string = matches?.groups?.pname || ""
-        var packet_data:string = matches?.groups?.pdata || ""
-        */
+        // Split packet to name and data
         var [packet_name, packet_data] = sdata.split(":")
         
-        
+        // Check if there is a handler for this packet
         if (packets.hasOwnProperty(packet_name)){
-            var j:Object = {};
+            var j:any = {};
+            // Decode base 64
             var packet_data_decoded = Buffer.from(packet_data, "base64").toString()
             try {
+                // Parse JSON
                 j = JSON.parse(packet_data_decoded);
                 console.log(`[RECV] ${packet_name} -> ${JSON.stringify(j)}`);
             } catch (e) {
                 console.log(`Invalid JSON: ${packet_data}`);
             } finally {
+                // Is the user logged in?
                 if (!user) {
                     if (packet_name == "login"){
                         user = await userLogin(ws,j)
@@ -56,7 +53,6 @@ const wsHandler = (ws: WebSocket,req: any) => {
             }
         } else {
             console.log(`Unknown packet: ${packet_name}`);
-            
         }
     })
     

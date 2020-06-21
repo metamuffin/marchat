@@ -53,3 +53,8 @@ export function s_error(ws: WebSocket | undefined, msg: string){
     if (!ws) return console.log(`Skipped error for offline user: "${msg}"`)
     sendPacketRaw(ws,"error",{message: msg})
 }
+
+
+export function r_id():string {
+    return (Math.random() * 0xFFFFFF).toString(16)
+}

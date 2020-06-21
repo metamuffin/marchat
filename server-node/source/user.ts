@@ -23,12 +23,12 @@ export class User {
     
     public async initializeOnline(ws: WebSocket) {
         await this.initialize()
+        onlineUsers.push(this);
         this.ws = ws;
     }
 
     public async initialize(){
         console.log(`Loading user: ${this.username}`);
-        onlineUsers.push(this);
         loadedUsers.push(this);
         var data = await dbcon.collection("user").findOne({username: this.username})
         this.username = data.username

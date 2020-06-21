@@ -136,11 +136,11 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
         if (!ch?.users) {
             return s_error(user.ws, "This channel is not initialized the right way... Muffin probably forgot a await somewhere again. :(")
         }
+        
         for (const uname of ch?.users) {
             var u = await getUser(uname)
             if (!u) continue
             ch.removeUser(u)
-            setTimeout(u.sendChannelList, 200);
         }
         ch?.unload() // Force unload
         await dbcon.collection("channel").deleteOne({name: data.name})

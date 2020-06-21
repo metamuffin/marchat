@@ -17,7 +17,7 @@ final marchatTheme = ThemeData(
   accentColor: purpleL,
   accentTextTheme: TextTheme(
     bodyText1: TextStyle(color: Colors.white),
-    caption: TextStyle(color: greenL)
+    caption: TextStyle(color: Colors.black)
   ),
   cardColor: greyM,
 
@@ -25,8 +25,9 @@ final marchatTheme = ThemeData(
   buttonTheme: ButtonThemeData(
     buttonColor: greenL,
     focusColor: greenD,
-    disabledColor: greyL, 
+    disabledColor: greyL,
   ),
+
 
   brightness: Brightness.dark,
   bottomAppBarColor: greyM,

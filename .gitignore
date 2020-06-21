@@ -2,3 +2,4 @@
 /server-node/build/**
 /server-node/source/secret.ts
 
+/test-node/node_modules

@@ -59,6 +59,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   void fetchMessages(int start, int length){
+    print("Fetching messages in $currentChannel from $start with length ${start+length}");
     if (currentChannel == null) return
     sendPacket("channel", {
       "name": currentChannel,
@@ -116,11 +117,11 @@ class _ChatViewState extends State<ChatView> {
             ListTile(
               enabled: true,
               onTap: (){
+                debugPrint("Selected a chat.");
                 setState(() {
-                  debugPrint("Selected a chat.");
                   currentChannel = channels[index];
-                  fetchMessages(-1, messageInitialBulkLoadCount);
                 });
+                fetchMessages(-1, messageInitialBulkLoadCount);
                 Navigator.pop(context);
               },
               onLongPress: () {
@@ -131,22 +132,20 @@ class _ChatViewState extends State<ChatView> {
                     content: Text("Do you want to delete or leave \"${channels[index]}\"?"),
                     actions: [
                       FlatButton(
-                        color: Theme.of(context).buttonColor,
                         child: Text("Nothing actually"),
                         onPressed: (){ Navigator.pop(context); },
                       ),
                       FlatButton(
-                        color: Theme.of(context).buttonColor,
                         child: Text("Just leave"),
                         onPressed: (){
                           sendPacket("channel_user_remove", {
-                            "username": LoginScreen.username
+                            "username": LoginScreen.username,
+                            "name": currentChannel
                           });
                           Navigator.pop(context);
                         },
                       ),
                       FlatButton(
-                        color: Theme.of(context).buttonColor,
                         child: Text("DELETE!!!"),
                         onPressed: (){
                           sendPacket("channel_remove", {

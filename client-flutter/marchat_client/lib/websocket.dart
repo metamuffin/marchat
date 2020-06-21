@@ -26,7 +26,7 @@ void loginDummy(){
 void startWS(){
   debugPrint("Connecting WS");
   try {
-    wsc = IOWebSocketChannel.connect("ws://marchat.zapto.org:5555");
+    wsc = IOWebSocketChannel.connect("ws://localhost:5555");
   } catch (WebSocketChannelException) {
     showError("Oh no... We cant connect you to the websocket service.");
   }

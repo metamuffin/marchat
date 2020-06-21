@@ -24,6 +24,7 @@ export class Channel {
         this.adminUsers = data.adminUsers || []
         this.messageHistory = data.messageHistory || []
         
+        loadedChannels.push(this);
     }
 
     public dump():any {
