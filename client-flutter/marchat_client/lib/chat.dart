@@ -25,7 +25,7 @@ class _ChatViewState extends State<ChatView> {
   Map<int, MessageView> messages = {};
   int maxMsgNumber = 0;
   int earliestMessageLoadedNumber = 0;
-  String currentChannel = "t2";
+  String currentChannel;
 
   TextEditingController messageSendFieldController = TextEditingController();
 
@@ -60,12 +60,13 @@ class _ChatViewState extends State<ChatView> {
 
   void fetchMessages(int start, int length){
     print("Fetching messages in $currentChannel from $start with length ${start+length}");
-    if (currentChannel == null) return
-    sendPacket("channel", {
-      "name": currentChannel,
-      "offset": start,
-      "count": length
-    });
+    if (currentChannel != null){
+      sendPacket("channel", {
+        "name": currentChannel,
+        "offset": start,
+        "count": length
+      });
+    }
   }
 
   Widget chatBuilder(BuildContext context){
@@ -77,14 +78,22 @@ class _ChatViewState extends State<ChatView> {
         reverse: true,
         itemCount: maxMsgNumber + 1,
         itemBuilder: (BuildContext context, int index) {
-          int msgIndex = (maxMsgNumber ?? 0) - index;
-          if (index < maxMsgNumber && index != -1) {
+          if (messages.length < 1) {
+            print("Loading inital messages");
+            fetchMessages(-1, messageInitialBulkLoadCount);
+            return CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+            );
+          }
+          int msgIndex = maxMsgNumber - index;
+          if (index < maxMsgNumber) {
             if (messages.containsKey(msgIndex)){
               return messages[msgIndex];
             } else {
-              return MessageView(number: 0,text: "Oh no",username: "I am an error!",);
+              return MessageView(number: 0,text: "This message could not be loaded but dont panic! Its probably saved on the server and the only problem is that this app is just shitty!",username: "Oh no",);
             }
           } else {
+            print("Loading messages");
             fetchMessages(msgIndex - messageBulkLoadCount, messageBulkLoadCount);
             return LinearProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
@@ -121,7 +130,8 @@ class _ChatViewState extends State<ChatView> {
                 setState(() {
                   currentChannel = channels[index];
                 });
-                fetchMessages(-1, messageInitialBulkLoadCount);
+                messages = {};
+                //fetchMessages(-1, messageInitialBulkLoadCount);
                 Navigator.pop(context);
               },
               onLongPress: () {
@@ -167,7 +177,7 @@ class _ChatViewState extends State<ChatView> {
         textDirection: TextDirection.ltr,
         children: [
           Expanded(
-            child: Builder(builder: chatBuilder,),
+            child: chatBuilder(context),
           ),
           Row(
             textDirection: TextDirection.ltr,

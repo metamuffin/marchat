@@ -10,13 +10,14 @@ class EventEmitter<T> {
   void on(String name,Function(T data) cb) {
     if (!events.containsKey(name)) events[name] = [];
     events[name].add(cb);
+    print("Registered callback for $name");
   }
   void off(String name) {
     events.remove(name);
   }
   void emit(String name, T data){
     if (!events.containsKey(name)) return debugPrint("Ohno! EventEmitter goes brrrrr: $name");
-    events[name].last(data);
+    (events[name].last)(data);
   }
   void pop(String name) {
     events[name].removeLast();
