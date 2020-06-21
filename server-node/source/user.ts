@@ -66,6 +66,7 @@ export class User {
     public async joinChannel(channel:Channel) {
         if (this.currentChannel) {
             this.currentChannel.activeUsers.splice(this.currentChannel.activeUsers.findIndex(c => c.username == this.username))
+            console.log("unjoined user from channel");
             if (this.currentChannel.activeUsers.length < 1) {
                 this.currentChannel.unload()
             }
