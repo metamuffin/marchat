@@ -19,14 +19,10 @@ export type TestUserCredentials = {username: string, password: string}
 export interface TestUserConnection {
     ws:websocket.connection,
     name:string
+    wse:EventEmitter,
+    oke:EventEmitter
 }
 
-export var test_wse = new EventEmitter();
-export var test_oke = new EventEmitter();
-
-test_wse.on("ok",(data) => {
-    test_oke.emit(data.packet)
-})
 
 export const test_users:Array<TestUserCredentials> = [
     {
@@ -46,18 +42,12 @@ export function test_waitForInput(){
     })
 }
 
-export function test_userLogin(con:TestUserConnection, creds: TestUserCredentials){
-    return new Promise((resolve,reject) => {
-        test_sendPacket(con, "login",{
-            username: creds.username,
-            password: SHA256(creds.password),
-            anti_replay: SHA256(SHA256(creds.password) + " " + timestamp().toString()),
-            timestamp: timestamp()
-        })
-        test_oke.once("login",() => {
-            resolve()
-        })
-
+export async function test_userLogin(con:TestUserConnection, creds: TestUserCredentials){
+    await test_sendPacketAsync(con, "login",{
+        username: creds.username,
+        password: SHA256(creds.password),
+        anti_replay: SHA256(SHA256(creds.password) + " " + timestamp().toString()),
+        timestamp: timestamp()
     })
 }
 
@@ -71,6 +61,16 @@ export function test_connect(name:string): Promise<TestUserConnection> {
         });
         
         client.on(`connect`, function(connection) {
+            var ucon = {
+                ws: connection,
+                name: name,
+                wse: new EventEmitter(),
+                oke: new EventEmitter()
+            }
+            ucon.wse.on("ok", (data) => {
+                ucon.oke.emit(data.packet)
+            })
+
             console.log(`${name}: WebSocket Client Connected`);
             connection.on(`error`, function(error) {
                 console.log(`${name}: Connection Error: ` + error.toString());
@@ -80,16 +80,15 @@ export function test_connect(name:string): Promise<TestUserConnection> {
             });
             connection.on(`message`, function(message) {
                 if (message.type === 'utf8') {
-                    console.log(`${name}: Received: '${message.utf8Data}'`);
                     const [packet_name, packet_data] = message?.utf8Data?.split(":")
                     const packet_data_decoded = Buffer.from(packet_data,"base64").toString()
                     const packet_data_json = JSON.parse(packet_data_decoded)
                     console.log(`${name}: RECV: ${packet_name} -> ${JSON.stringify(packet_data_json)}`);
-                    test_wse.emit(packet_name,packet_data_json)
+                    ucon.wse.emit(packet_name,packet_data_json)
                 }
             });
             
-            resolve({ws: connection, name: name});
+            resolve(ucon);
 
         });
 
@@ -100,13 +99,14 @@ export function test_connect(name:string): Promise<TestUserConnection> {
 export function test_sendPacket(con: TestUserConnection, name:string, data:any){
     const packet_data_json = JSON.stringify(data)
     const packet_data_encoded = Buffer.from(packet_data_json).toString("base64")
-    const packet = `${con.name}: SEND: ${name}: ${packet_data_encoded}`
+    console.log(`${con.name}: SEND: ${name}: ${packet_data_json}`)
+    const packet = `${name}:${packet_data_encoded}`
     con.ws.sendUTF(packet);
 }
 
 export function test_sendPacketAsync(con: TestUserConnection, name: string, data: any){
     return new Promise((resolve,reject) => {
         test_sendPacket(con,name,data);
-        test_oke.once(name,resolve)
+        con.oke.once(name,resolve)
     })
 }

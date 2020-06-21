@@ -56,5 +56,5 @@ export function s_error(ws: WebSocket | undefined, msg: string){
 
 
 export function r_id():string {
-    return (Math.random() * 0xFFFFFF).toString(16)
+    return Math.floor(Math.random() * 0xFFFFFF).toString(16)
 }

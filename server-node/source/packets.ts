@@ -104,6 +104,7 @@ export var packets:{[key: string]: (user: User, data:any) => Promise<void>} = {
             await user.joinChannel(ch);
         }
         await user.sendChannelUpdate(data.count,data.offset)
+        s_ok(user.ws, "channel");
     },
     message: async (user, data) => {
         if(dataAssertType(user.ws, data.text, "string","You have to send something.")) return
