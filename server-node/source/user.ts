@@ -73,7 +73,7 @@ export class User {
         }
         this.currentChannel = channel
         this.currentChannel?.activeUsers.push(this)
-        console.log(this.currentChannel.activeUsers.length +  + "in channel " + this.currentChannel.name + "..................................................................")
+        console.log(this.currentChannel.activeUsers.length  + " active users in channel " + this.currentChannel.name + "..................................................................")
     }
 
     public async sendChannelUpdate(count:number, offset: number){
