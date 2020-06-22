@@ -74,6 +74,13 @@ export class Channel {
         this.adminUsers.splice(this.adminUsers.findIndex(u => u == user.username))
     }
 
+    public async unjoinActiveUser(user:User){
+        this.activeUsers.splice(this.activeUsers.findIndex(c => c.username == user.username))
+        console.log("unjoined user from channel");
+        console.log(this.activeUsers + "------------------------------------------------------------------------------")
+        return
+    }
+
     public async sendUpdate(user: User, count: number, offset: number){
         var msgs = await (await this.fetchMessages(count,offset)).map((m) => ({
             number: m.number,
