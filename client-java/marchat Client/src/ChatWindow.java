@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import javax.swing.JTextArea;
 
 public class ChatWindow extends JFrame {
 	
@@ -37,6 +38,7 @@ public class ChatWindow extends JFrame {
 	private Button[] allChannelButtons = new Button[1000];
 	private JLabel lblCurrentChannel;
 	private JButton btnAddUserTo;
+	private JTextArea textAreaMessages;
 	/**
 	 * Launch the application.
 	 * @return 
@@ -145,20 +147,34 @@ public class ChatWindow extends JFrame {
 		btnAddUserTo.setBounds(910, 11, 0, 0);
 		contentPanel.add(btnAddUserTo);
 		
+		textAreaMessages = new JTextArea();
+		textAreaMessages.setFont(new Font("Monospaced", Font.PLAIN, 17));
+		textAreaMessages.setText("sfthshsthgahahsthsrthsrhsttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt");
+		textAreaMessages.setForeground(Color.WHITE);
+		textAreaMessages.setBackground(Color.LIGHT_GRAY);
+		textAreaMessages.setBounds(265, 0, 0, 0);
+		//textAreaMessages.setBounds(265, 52, 809, 561);
+		contentPanel.add(textAreaMessages);
+		
 		if(!channelToJoin.equals("")) {
 			JoinChannelUI(channelToJoin);
 		}
 	}
 
 	
-	public void UpdateChannelList(JSONObject channelList, String channelToJoin) {
+	public void RequestUpdateChannelList(JSONObject channelList, String channelToJoin) { 
+		AskForWindowReload ask = new AskForWindowReload(channelList, channelToJoin, this);
+		ask.setVisible(true);
+	}
+	
+	public void UpdateChannelList(JSONObject channelList, String channelToJoin) { 
+		
 		setVisible(false);
 		System.out.println("Update channnel list");
 		ChatWindow newChat = new ChatWindow(channelList, channelToJoin);
 		Client.chatWindow = newChat;
 		newChat.setVisible(true);
-		//Login.client.SendChannelUserAdd("test2", "marchat-welcome");
-		//Login.client.sendChannelCreate("marchat-welcome-test");
+		
 	}
 	
 	public void JoinChannelUI(String channelName) {
@@ -168,6 +184,7 @@ public class ChatWindow extends JFrame {
 		dtrpnEnterMessage.setBounds(285, 646, 693, 23);
 		btnSend_1.setBounds(988, 646, 65, 23);
 		btnAddUserTo.setBounds(910, 11, 154, 23);
+		textAreaMessages.setBounds(265, 52, 809, 561);
 		lblNoChannel.setText("");
 	}
 	
@@ -175,5 +192,4 @@ public class ChatWindow extends JFrame {
 		System.out.println(nameOfUser);
 		Login.client.SendChannelUserAdd(nameOfUser, Login.client.currentChannel);
 	}
-	
 }
