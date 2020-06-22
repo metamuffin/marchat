@@ -24,7 +24,7 @@ export function broadcastPacket(users:Array<User>, pname: string, pdata: Object)
     var j = JSON.stringify(pdata)
     console.log(`[SEND_BROADCAST] ${pname} -> ${j}`);
     var b64 = Buffer.from(j).toString("base64")
-    for (const user of onlineUsers) {
+    for (const user of users) {
         if (!user.ws) console.log(`Skipped packet for offline user: ${pname}`);
         user.ws?.send(pname + ":" + b64)
     }
