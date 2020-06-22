@@ -37,6 +37,7 @@ export class Channel {
     }
 
     public unload(){
+        if(this.activeUsers.length >= 1) return;
         console.log(`Unloading channel: ${this.name}`);
         loadedChannels.splice(loadedChannels.findIndex(u => u.name == this.name))
         var j = this.dump()
@@ -71,6 +72,16 @@ export class Channel {
         user.channels.splice(user.channels.findIndex(c => c == this.name))
         this.users.splice(this.users.findIndex(u => u == user.username))
         this.adminUsers.splice(this.adminUsers.findIndex(u => u == user.username))
+    }
+
+    public async unjoinActiveUser(user:User){
+        this.activeUsers.splice(this.activeUsers.findIndex(c => {
+            if(c.username == user.username) console.log("unjoined user " + c.username +  " from channel " + this.name);
+            c.username == user.username
+        }))
+        
+        console.log(this.activeUsers + "active users in " + this.name + "------------------------------------------------------------------------------")
+        return
     }
 
     public async sendUpdate(user: User, count: number, offset: number){

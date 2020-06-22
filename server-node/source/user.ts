@@ -3,6 +3,7 @@ import { Channel } from "./channel";
 import { broadcastPacket, sendPacket } from "./packets";
 import WebSocket from "ws"
 import { getChannel } from "./utils";
+import { Console } from "console";
 
 export var onlineUsers:Array<User> = []
 export var loadedUsers:Array<User> = []
@@ -44,10 +45,10 @@ export class User {
         }
     }
 
-    public unload(){
+    public async unload(){
         onlineUsers.splice(onlineUsers.findIndex(u => u.username == this.username))
         loadedUsers.splice(loadedUsers.findIndex(u => u.username == this.username))
-        this.currentChannel?.activeUsers?.splice(this.currentChannel.activeUsers.findIndex(c => c.username == this.username))
+        await this.currentChannel?.unjoinActiveUser(this);
         if ((this.currentChannel?.activeUsers?.length || 0) < 1) {
             if (this.currentChannel) this.currentChannel?.unload()
         }
@@ -55,7 +56,7 @@ export class User {
         console.log(j);
         dbcon.collection("user").replaceOne({username: this.username}, j)
         console.log(`Unloading user: ${this.username}`);
-        
+        return
     }
 
     public async sendMessage(text:string) {
@@ -65,14 +66,14 @@ export class User {
 
     public async joinChannel(channel:Channel) {
         if (this.currentChannel) {
-            this.currentChannel.activeUsers.splice(this.currentChannel.activeUsers.findIndex(c => c.username == this.username))
-            console.log("unjoined user from channel");
+                await this.currentChannel.unjoinActiveUser(this);
             if (this.currentChannel.activeUsers.length < 1) {
                 this.currentChannel.unload()
             }
         }
         this.currentChannel = channel
         this.currentChannel?.activeUsers.push(this)
+        console.log(this.currentChannel.activeUsers.length  + " active users in channel " + this.currentChannel.name + "..................................................................")
     }
 
     public async sendChannelUpdate(count:number, offset: number){
