@@ -80,7 +80,7 @@ export class Channel {
             c.username == user.username
         }))
         
-        console.log(this.activeUsers + "------------------------------------------------------------------------------")
+        console.log(this.activeUsers + "active users in " + this.name + "------------------------------------------------------------------------------")
         return
     }
 
