@@ -3,6 +3,7 @@ import { Channel } from "./channel";
 import { broadcastPacket, sendPacket } from "./packets";
 import WebSocket from "ws"
 import { getChannel } from "./utils";
+import { Console } from "console";
 
 export var onlineUsers:Array<User> = []
 export var loadedUsers:Array<User> = []
@@ -72,6 +73,7 @@ export class User {
         }
         this.currentChannel = channel
         this.currentChannel?.activeUsers.push(this)
+        console.log(this.currentChannel.activeUsers.length + "..................................................................")
     }
 
     public async sendChannelUpdate(count:number, offset: number){
