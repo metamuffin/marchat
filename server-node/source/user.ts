@@ -67,6 +67,7 @@ export class User {
         if (this.currentChannel) {
             this.currentChannel.activeUsers.splice(this.currentChannel.activeUsers.findIndex(c => c.username == this.username))
             console.log("unjoined user from channel");
+            console.log(this.currentChannel.activeUsers + "------------------------------------------------------------------------------")
             if (this.currentChannel.activeUsers.length < 1) {
                 this.currentChannel.unload()
             }
