@@ -37,6 +37,7 @@ export class Channel {
     }
 
     public unload(){
+        if(this.activeUsers.length >= 1) return;
         console.log(`Unloading channel: ${this.name}`);
         loadedChannels.splice(loadedChannels.findIndex(u => u.name == this.name))
         var j = this.dump()
