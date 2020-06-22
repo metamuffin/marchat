@@ -75,8 +75,11 @@ export class Channel {
     }
 
     public async unjoinActiveUser(user:User){
-        this.activeUsers.splice(this.activeUsers.findIndex(c => c.username == user.username))
-        console.log("unjoined user from channel");
+        this.activeUsers.splice(this.activeUsers.findIndex(c => {
+            if(c.username == user.username) console.log("unjoined user " + c.username +  "from channel");
+            c.username == user.username
+        }))
+        
         console.log(this.activeUsers + "------------------------------------------------------------------------------")
         return
     }
