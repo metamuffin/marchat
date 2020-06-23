@@ -39,7 +39,7 @@ public class ChannelUserAddWindow extends JDialog {
 	public ChannelUserAddWindow() {
 		setResizable(false);
 		setModalityType(ModalityType.DOCUMENT_MODAL);
-		setTitle("Create channel");
+		setTitle("Add user");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(OwnColors.grey_d);
@@ -48,7 +48,7 @@ public class ChannelUserAddWindow extends JDialog {
 		contentPanel.setLayout(null);
 		
 		textField = new JTextField();
-		textField.setToolTipText("Enter a name for the channel");
+		textField.setToolTipText("");
 		textField.setDropMode(DropMode.INSERT);
 		textField.setBounds(84, 111, 255, 20);
 		contentPanel.add(textField);

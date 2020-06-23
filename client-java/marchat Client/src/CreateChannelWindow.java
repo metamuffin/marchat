@@ -48,7 +48,6 @@ public class CreateChannelWindow extends JDialog {
 		contentPanel.setLayout(null);
 		
 		textField = new JTextField();
-		textField.setToolTipText("Enter a name for the channel");
 		textField.setDropMode(DropMode.INSERT);
 		textField.setBounds(84, 111, 255, 20);
 		contentPanel.add(textField);
