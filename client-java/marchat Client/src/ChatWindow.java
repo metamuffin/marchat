@@ -77,19 +77,7 @@ public class ChatWindow extends JFrame {
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		
-		for(int i = 0; i < channels.length(); i++) {
-			Button btnNewButton = new Button("#" + channels.getString(i));
-			btnNewButton.setBounds(10, 11 + i * 34, 238, 23);
-			allChannelButtons[i] = btnNewButton;
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					String channelName = btnNewButton.getLabel().substring(1);
-					Login.client.SendJoinChannel(channelName);
-				}
-			});
-			
-			contentPanel.add(btnNewButton);
-		}
+		UpdateChannelList(channelList, channelToJoin);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(OwnColors.grey_m);
@@ -148,10 +136,11 @@ public class ChatWindow extends JFrame {
 		contentPanel.add(btnAddUserTo);
 		
 		textAreaMessages = new JTextArea();
+		textAreaMessages.setLineWrap(true);
 		textAreaMessages.setFont(new Font("Monospaced", Font.PLAIN, 17));
 		textAreaMessages.setText("sfthshsthgahahsthsrthsrhsttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt");
 		textAreaMessages.setForeground(Color.WHITE);
-		textAreaMessages.setBackground(Color.LIGHT_GRAY);
+		textAreaMessages.setBackground(OwnColors.grey_d);
 		textAreaMessages.setBounds(265, 0, 0, 0);
 		//textAreaMessages.setBounds(265, 52, 809, 561);
 		contentPanel.add(textAreaMessages);
@@ -162,19 +151,26 @@ public class ChatWindow extends JFrame {
 	}
 
 	
-	public void RequestUpdateChannelList(JSONObject channelList, String channelToJoin) { 
-		AskForWindowReload ask = new AskForWindowReload(channelList, channelToJoin, this);
-		ask.setVisible(true);
-	}
-	
 	public void UpdateChannelList(JSONObject channelList, String channelToJoin) { 
+		contentPanel.revalidate();
+		contentPanel.repaint();
+		JSONArray channels = channelList.getJSONArray("channels");
+		System.out.println(channels);
 		
-		setVisible(false);
-		System.out.println("Update channnel list");
-		ChatWindow newChat = new ChatWindow(channelList, channelToJoin);
-		Client.chatWindow = newChat;
-		newChat.setVisible(true);
-		
+		for(int i = 0; i < channels.length(); i++) {
+			Button btnNewButton = new Button("." + channels.getString(i));
+			btnNewButton.setBounds(10, 11 + i * 34, 238, 23);
+			allChannelButtons[i] = btnNewButton;
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String channelName = btnNewButton.getLabel().substring(1);
+					Login.client.SendJoinChannel(channelName);
+				}
+			});
+			
+			contentPanel.add(btnNewButton);
+		}
+		contentPanel.validate();
 	}
 	
 	public void JoinChannelUI(String channelName) {
