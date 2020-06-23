@@ -26,6 +26,9 @@ import javax.swing.DropMode;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.Font;
 import javax.swing.JTextArea;
 import javax.swing.BoxLayout;
@@ -41,12 +44,15 @@ import javax.swing.JTextField;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.border.LineBorder;
 
 public class ChatWindow extends JFrame {
 	
 	public JPanel panelButtons;
 	private JTextField textField;
     public static JLabel lblCurrentChannel;
+    private JLabel lblYouNeedTo;
+    private JButton btnSend;
 	/**
 	 * Launch the application.
 	 * @return 
@@ -67,8 +73,14 @@ public class ChatWindow extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public ChatWindow(JSONObject channelList, String channelToJoin) {
+	public ChatWindow(JSONObject channelList, String channelToJoin) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		
+		
 		getContentPane().setBackground(OwnColors.grey_d);
 		setTitle("marchat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,40 +96,52 @@ public class ChatWindow extends JFrame {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(ChatPanel, GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE))
+					.addComponent(ChatPanel, GroupLayout.DEFAULT_SIZE, 1080, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(panelButtons, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-				.addComponent(ChatPanel, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+				.addComponent(ChatPanel, GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
+				.addComponent(panelButtons, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
 		);
 		
 		textField = new JTextField();
 		textField.setDropMode(DropMode.INSERT);
 		textField.setColumns(10);
 		
-		JButton btnSend = new JButton("Send");
+		btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				Login.client.SendMessage(textField.getText());;
+				textField.setText("");
+				
 			}
 		});
 		
 		lblCurrentChannel = new JLabel("");
 		lblCurrentChannel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblCurrentChannel.setForeground(Color.WHITE);
+		
+		lblYouNeedTo = new JLabel("You need to join a channel before you can write messages!");
+		lblYouNeedTo.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblYouNeedTo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblYouNeedTo.setForeground(Color.WHITE);
 		GroupLayout gl_ChatPanel = new GroupLayout(ChatPanel);
 		gl_ChatPanel.setHorizontalGroup(
-			gl_ChatPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_ChatPanel.createSequentialGroup()
-					.addContainerGap()
+			gl_ChatPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_ChatPanel.createSequentialGroup()
 					.addGroup(gl_ChatPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblCurrentChannel, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_ChatPanel.createSequentialGroup()
-							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
-							.addGap(18)
-							.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)))
+							.addContainerGap()
+							.addGroup(gl_ChatPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblCurrentChannel, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_ChatPanel.createSequentialGroup()
+									.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+									.addGap(18)
+									.addComponent(btnSend, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))))
+						.addComponent(lblYouNeedTo, GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_ChatPanel.setVerticalGroup(
@@ -125,7 +149,9 @@ public class ChatWindow extends JFrame {
 				.addGroup(gl_ChatPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblCurrentChannel)
-					.addPreferredGap(ComponentPlacement.RELATED, 732, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblYouNeedTo, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(18)
 					.addGroup(gl_ChatPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnSend))
@@ -133,6 +159,8 @@ public class ChatWindow extends JFrame {
 		);
 		ChatPanel.setLayout(gl_ChatPanel);
 		
+		textField.setVisible(false);
+		btnSend.setVisible(false);
 		
 		UpdateChannelList(channelList, channelToJoin);
 		
@@ -182,7 +210,7 @@ public class ChatWindow extends JFrame {
 		
 		for(int i = 0; i < channels.length(); i++) {
 			JButton btnChannel = new JButton("#" + channels.getString(i));
-			btnChannel.setBounds(10, 5 + i * 34, 164, 23);
+			btnChannel.setBounds(10, 5 + i * 34, 204, 23);
 			btnChannel.setToolTipText("Join channel: " + btnChannel.getText().substring(1));
 			btnChannel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -200,6 +228,9 @@ public class ChatWindow extends JFrame {
 	}
 	
 	public void JoinChannelUI(String channelName) {
+		textField.setVisible(true);
+		btnSend.setVisible(true);
+		lblYouNeedTo.setText("");
 		lblCurrentChannel.setText("Current channel: " + channelName);
 		Client.currentChannel = Client.currentChannelTryToJoin;
 	}

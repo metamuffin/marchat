@@ -12,6 +12,9 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -41,11 +44,15 @@ public class Login extends JFrame {
   public static Client client = new Client();
   /**
    * Launch the application.
+ * @throws UnsupportedLookAndFeelException 
+ * @throws IllegalAccessException 
+ * @throws InstantiationException 
+ * @throws ClassNotFoundException 
    */
   
   
-  public static void main(String[] args) {
-	  
+  public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	  UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
     try {
       dialog = new Login(true);
       dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
