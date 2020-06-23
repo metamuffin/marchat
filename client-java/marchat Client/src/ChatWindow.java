@@ -35,10 +35,12 @@ public class ChatWindow extends JFrame {
 	private JLabel lblNoChannel;
 	private JEditorPane dtrpnEnterMessage;
 	private JButton btnSend_1;
-	private Button[] allChannelButtons = new Button[1000];
+	private Button[] allChannelButtons;
 	private JLabel lblCurrentChannel;
 	private JButton btnAddUserTo;
 	private JTextArea textAreaMessages;
+	private JPanel buttonPanel;
+	private Button button;
 	/**
 	 * Launch the application.
 	 * @return 
@@ -77,22 +79,18 @@ public class ChatWindow extends JFrame {
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBackground(OwnColors.grey_m);
+		buttonPanel.setBounds(0, 0, 262, 691);
+		contentPanel.add(buttonPanel);
+		buttonPanel.setLayout(null);
+		
+		button = new Button("New button");
+		button.setBounds(84, 10, 70, 22);
+		buttonPanel.add(button);
+		
+		
 		UpdateChannelList(channelList, channelToJoin);
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(OwnColors.grey_m);
-		panel.setBounds(0, 0, 262, 691);
-		contentPanel.add(panel);
-		panel.setLayout(null);
-		
-		JButton btnCreateNewChannel = new JButton("Create new channel");
-		btnCreateNewChannel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CreateChannelWindow.start();
-			}
-		});
-		btnCreateNewChannel.setBounds(52, 657, 154, 23);
-		panel.add(btnCreateNewChannel);
 		
 		dtrpnEnterMessage = new JEditorPane();
 		dtrpnEnterMessage.setDropMode(DropMode.INSERT);
@@ -156,6 +154,10 @@ public class ChatWindow extends JFrame {
 		contentPanel.repaint();
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
+
+		//buttonPanel.removeAll();
+
+		allChannelButtons = new Button[channels.length()];
 		
 		for(int i = 0; i < channels.length(); i++) {
 			Button btnNewButton = new Button("." + channels.getString(i));
@@ -168,9 +170,19 @@ public class ChatWindow extends JFrame {
 				}
 			});
 			
-			contentPanel.add(btnNewButton);
+			buttonPanel.add(btnNewButton);
 		}
-		contentPanel.validate();
+		
+		JButton btnCreateNewChannel = new JButton("Create new channel");
+		btnCreateNewChannel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CreateChannelWindow.start();
+			}
+		});
+		btnCreateNewChannel.setBounds(52, 657, 154, 23);
+		buttonPanel.add(btnCreateNewChannel);
+		
+		buttonPanel.validate();
 	}
 	
 	public void JoinChannelUI(String channelName) {
