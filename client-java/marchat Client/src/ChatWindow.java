@@ -79,11 +79,27 @@ public class ChatWindow extends JFrame {
 		JSONArray channels = channelList.getJSONArray("channels");
 		System.out.println(channels);
 		
+<<<<<<< HEAD
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBackground(OwnColors.grey_m);
 		buttonPanel.setBounds(0, 0, 262, 691);
 		contentPanel.add(buttonPanel);
 		buttonPanel.setLayout(null);
+=======
+		for(int i = 0; i < channels.length(); i++) {
+			Button btnNewButton = new Button("#" + channels.getString(i));
+			btnNewButton.setBounds(10, 11 + i * 34, 238, 23);
+			allChannelButtons[i] = btnNewButton;
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String channelName = btnNewButton.getLabel().substring(1);
+					Login.client.SendJoinChannel(channelName);
+				}
+			});
+			
+			contentPanel.add(btnNewButton);
+		}
+>>>>>>> parent of c045a63... added update channellist funktion
 		
 		button = new Button("New button");
 		button.setBounds(84, 10, 70, 22);
@@ -134,11 +150,10 @@ public class ChatWindow extends JFrame {
 		contentPanel.add(btnAddUserTo);
 		
 		textAreaMessages = new JTextArea();
-		textAreaMessages.setLineWrap(true);
 		textAreaMessages.setFont(new Font("Monospaced", Font.PLAIN, 17));
 		textAreaMessages.setText("sfthshsthgahahsthsrthsrhsttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt");
 		textAreaMessages.setForeground(Color.WHITE);
-		textAreaMessages.setBackground(OwnColors.grey_d);
+		textAreaMessages.setBackground(Color.LIGHT_GRAY);
 		textAreaMessages.setBounds(265, 0, 0, 0);
 		//textAreaMessages.setBounds(265, 52, 809, 561);
 		contentPanel.add(textAreaMessages);
@@ -149,7 +164,13 @@ public class ChatWindow extends JFrame {
 	}
 
 	
+	public void RequestUpdateChannelList(JSONObject channelList, String channelToJoin) { 
+		AskForWindowReload ask = new AskForWindowReload(channelList, channelToJoin, this);
+		ask.setVisible(true);
+	}
+	
 	public void UpdateChannelList(JSONObject channelList, String channelToJoin) { 
+<<<<<<< HEAD
 		contentPanel.revalidate();
 		contentPanel.repaint();
 		JSONArray channels = channelList.getJSONArray("channels");
@@ -183,6 +204,15 @@ public class ChatWindow extends JFrame {
 		buttonPanel.add(btnCreateNewChannel);
 		
 		buttonPanel.validate();
+=======
+		
+		setVisible(false);
+		System.out.println("Update channnel list");
+		ChatWindow newChat = new ChatWindow(channelList, channelToJoin);
+		Client.chatWindow = newChat;
+		newChat.setVisible(true);
+		
+>>>>>>> parent of c045a63... added update channellist funktion
 	}
 	
 	public void JoinChannelUI(String channelName) {
