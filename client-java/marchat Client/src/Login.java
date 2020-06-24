@@ -52,7 +52,7 @@ public class Login extends JFrame {
   
   
   public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-	  UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
+	 // UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
     try {
       dialog = new Login(true);
       dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

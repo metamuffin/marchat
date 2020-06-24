@@ -45,6 +45,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.border.LineBorder;
+import javax.swing.border.Border;
+import java.awt.SystemColor;
 
 public class ChatWindow extends JFrame {
 	
@@ -198,10 +200,16 @@ public class ChatWindow extends JFrame {
 
 		
 	}
-
+	
 	
 	public void UpdateChannelList(JSONObject channelList, String channelToJoin) {
 		panelButtons.setLayout(null);
+		
+		RoundedButton button = new RoundedButton ("asas");
+		button.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		button.setBackground(Color.WHITE);
+		button.setBounds(29, 10, 147, 22);
+		panelButtons.add(button);
 		
 		System.out.println(channelList);
 		JSONArray channels = channelList.getJSONArray("channels");
@@ -209,12 +217,13 @@ public class ChatWindow extends JFrame {
 		panelButtons.removeAll();
 		
 		for(int i = 0; i < channels.length(); i++) {
-			JButton btnChannel = new JButton("#" + channels.getString(i));
+			RoundedButton btnChannel = new RoundedButton("#" + channels.getString(i));
+			btnChannel.setBackground(Color.WHITE);
+			btnChannel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btnChannel.setBounds(10, 5 + i * 34, 204, 23);
-			btnChannel.setToolTipText("Join channel: " + btnChannel.getText().substring(1));
 			btnChannel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Login.client.SendJoinChannel(btnChannel.getText().substring(1));
+					Login.client.SendJoinChannel(btnChannel.getLabel().substring(1));
 				}
 			});
 			panelButtons.setLayout(null);

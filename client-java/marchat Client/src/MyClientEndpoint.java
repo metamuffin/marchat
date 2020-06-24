@@ -43,7 +43,7 @@ public class MyClientEndpoint {
         if(message.startsWith("ok:")) {
       		
       		if(obj.getString("packet").equals("register")) {
-      		Client.showInfoBox("Message from server", "Success!");
+      		//Client.showInfoBox("Message from server", "Success!");
       		RegisterWindow.closeRegisterScreen();
       		Login.showLoginScreen();
       		}else if (obj.getString("packet").equals("login")) {

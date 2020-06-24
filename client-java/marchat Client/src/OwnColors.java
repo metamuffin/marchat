@@ -14,5 +14,8 @@ public class OwnColors {
 
 	public static Color purple_l =  new Color(155, 89, 182);
 	public static Color purple_d =  new Color(142, 68, 173);
+	
+	public static Color blue_l = new Color(52,152,219);
+	public static Color blue_d = new Color(41,128,185);
 
 }
