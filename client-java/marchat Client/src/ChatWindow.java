@@ -217,7 +217,7 @@ public class ChatWindow extends JFrame {
 		panelButtons.removeAll();
 		
 		for(int i = 0; i < channels.length(); i++) {
-			RoundedButton btnChannel = new RoundedButton("#" + channels.getString(i));
+			Button btnChannel = new Button("#" + channels.getString(i));
 			btnChannel.setBackground(Color.WHITE);
 			btnChannel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btnChannel.setBounds(10, 5 + i * 34, 204, 23);
