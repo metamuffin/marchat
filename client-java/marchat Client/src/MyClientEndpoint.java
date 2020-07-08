@@ -64,6 +64,8 @@ public class MyClientEndpoint {
      		String user = obj.getString("username");
      		String msg = obj.getString("text");
      		System.out.println("Received message from " + user + ": " + msg);
+     		Client.chatWindow.showMessage(user, msg);
+     		
      	}else if(message.startsWith("channel-list:") && Client.loggedIn) {
      		Client.activeChannelList = obj;
   			Client.chatWindow.UpdateChannelList(Client.activeChannelList, Client.currentChannelTryToJoin);
