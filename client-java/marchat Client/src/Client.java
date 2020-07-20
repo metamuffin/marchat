@@ -152,5 +152,11 @@ public class Client {
     	
     }
     
+    public static void showErrorBox(String title, String msg) {
+
+ 		JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE);
+    	
+    }
+    
     
 }

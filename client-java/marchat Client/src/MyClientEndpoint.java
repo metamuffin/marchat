@@ -53,17 +53,19 @@ public class MyClientEndpoint {
       		}else if(obj.getString("packet").equals("channel_create")) {
       		}
       		
-      	}else if(message.startsWith("error:")){
+      	}else if(message.startsWith("error:") && Client.loggedIn){
      		String msg = obj.getString("message");
      		
      		String titleBar = "Error";
-     		Client.showInfoBox(titleBar, msg);
+     		Client.showErrorBox(titleBar, msg);
      	}else if(message.startsWith("channel:")){
      		Client.chatWindow.JoinChannelUI(Client.currentChannelTryToJoin);
      	}else if (message.startsWith("message:")) {
      		String user = obj.getString("username");
      		String msg = obj.getString("text");
      		System.out.println("Received message from " + user + ": " + msg);
+     		Client.chatWindow.showMessage(user, msg);
+     		
      	}else if(message.startsWith("channel-list:") && Client.loggedIn) {
      		Client.activeChannelList = obj;
   			Client.chatWindow.UpdateChannelList(Client.activeChannelList, Client.currentChannelTryToJoin);
@@ -83,7 +85,7 @@ public class MyClientEndpoint {
          		String msg = obj.getString("message");
          		
          		String titleBar = "Error";
-         		Client.showInfoBox(titleBar, msg);
+         		Client.showErrorBox(titleBar, msg);
          		Login.clearInputs();
          	}
          }
