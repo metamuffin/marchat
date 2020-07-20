@@ -9,6 +9,7 @@ import WebSocket from "ws"
 export var packet_split_regex:RegExp = /(?<pname>.+):(?<pdata>.+)/ig
 
 
+
 // Create a express webserver
 var _app = express();
 // Add websocket support
@@ -27,6 +28,9 @@ const wsHandler = (ws: WebSocket,req: any) => {
         // Check if there is a handler for this packet
         if (packets.hasOwnProperty(packet_name)){
             var j:any = {};
+            if (!packet_data) {
+                console.log("No packet data.");
+            }   
             // Decode base 64
             var packet_data_decoded = Buffer.from(packet_data, "base64").toString()
             try {
