@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
@@ -13,20 +12,20 @@ EventEmitter<String> oke = EventEmitter<String>();
 
 BuildContext globContext;
 
-void loginDummy(){
+void loginDummy() {
   sendPacket("login", {
     "username": "dummy",
     "password": sha256String("dummy"),
-    "anti_replay": sha256String(sha256String("dummy") + " " + unixTimestamp().toString()),
+    "anti_replay":
+        sha256String(sha256String("dummy") + " " + unixTimestamp().toString()),
     "timestamp": unixTimestamp(),
   });
 }
 
-
-void startWS(){
+void startWS() {
   debugPrint("Connecting WS");
   try {
-    wsc = IOWebSocketChannel.connect("ws://localhost:5555");
+    wsc = IOWebSocketChannel.connect("ws://marchat.zapto.org:5555");
   } catch (WebSocketChannelException) {
     showError("Oh no... We cant connect you to the websocket service.");
   }
@@ -37,18 +36,18 @@ void startWS(){
     showError(data["message"]);
   });
   wse.on("ok", (data) {
-    oke.emit(data["packet"],null);
+    oke.emit(data["packet"], null);
   });
 }
 
-void showError(String message){
+void showError(String message) {
   Scaffold.of(globContext).showSnackBar(SnackBar(
     content: Text(message),
-    action: SnackBarAction(label: "Ignore", onPressed: (){}),
+    action: SnackBarAction(label: "Ignore", onPressed: () {}),
   ));
 }
 
-void parsePacket(String packet){
+void parsePacket(String packet) {
   Codec<String, String> codec = utf8.fuse(base64);
   List<String> packetSplit = packet.split(":");
   String packetName, packetData;
@@ -56,16 +55,17 @@ void parsePacket(String packet){
   try {
     packetData = codec.decode(packetSplit[1]);
   } catch (e) {
-    showError("Uff. It seems like the server is too distorded to send us correct data.");
+    showError(
+        "Uff. It seems like the server is too distorded to send us correct data.");
   }
   dynamic packetDataJ = json.decode(packetData);
   debugPrint("PACKET_INCOMMING");
   debugPrint(packetName);
   debugPrint(packetData);
-  wse.emit(packetName,packetDataJ);
+  wse.emit(packetName, packetDataJ);
 }
 
-void sendPacket(String packetName,Map<String,dynamic> packetData){
+void sendPacket(String packetName, Map<String, dynamic> packetData) {
   Codec<String, String> codec = utf8.fuse(base64);
   String packetDataJson = jsonEncode(packetData);
   String packetDataEncoded = codec.encode(packetDataJson);
@@ -76,12 +76,12 @@ void sendPacket(String packetName,Map<String,dynamic> packetData){
   wsc.sink.add(packet);
 }
 
-String sha256String(String a){
+String sha256String(String a) {
   var bytes = utf8.encode(a);
   var digest = sha256.convert(bytes);
   return digest.toString();
 }
 
-int unixTimestamp(){
+int unixTimestamp() {
   return (DateTime.now().toUtc().millisecondsSinceEpoch / 1000).floor();
 }

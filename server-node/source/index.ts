@@ -15,12 +15,13 @@ var _app = express();
 // Add websocket support
 var app = expressWs(_app).app
 
-const wsHandler = (ws: WebSocket,req: any) => {
-    console.log("[CON_OPEN]");
+const wsHandler = (ws: WebSocket,req: express.Request) => {
+    console.log(`[CON_OPEN] IP: ${req.ip}`);
     var user: User | undefined = undefined;
     // Receive data
     ws.on("message",async (data) => {
         var sdata:string = data.toString()
+        console.log(sdata);
         
         // Split packet to name and data
         var [packet_name, packet_data] = sdata.split(":")
