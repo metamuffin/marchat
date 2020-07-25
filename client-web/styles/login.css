@@ -1,0 +1,28 @@
+
+
+body{
+    background-color: #34495e;
+    align-self: center;
+}
+
+h1{
+    padding-bottom: 40px;
+    text-align: center;
+    color: #ecf0f1;
+}
+
+#login{
+    position: fixed; /* or absolute */
+    top: 10%;
+    left: 40%;
+    align-self: center;
+}
+
+input{
+    margin: auto;
+    margin-top: 15px;
+    display: block;
+    align-self: center;
+    text-align: center;
+}
+
