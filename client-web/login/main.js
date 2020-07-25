@@ -16,22 +16,17 @@ window.onload = async () => {
     ws.onerror = (ev) => console.log(`WS_ERROR: ${ev}`)
 }
 
-function tryLogin(){
+async function tryLogin() {
     var username = document.getElementById("usernameTxtField").value;
     var password = document.getElementById("passwordTextField").value;
-    if(username == "" || password == ""){
-        alert("The input cant be blank!");
-        return;
-    }
-
     var data = {
         username: username,
         password: await sha256(password),
         anti_replay: await sha256(await sha256(password) + " " + Date.now()),
         timestamp: Date.now(),
-    };
-    sendPacket("login", data);
+    }
 
+    sendPacket("login", data);
 }
 
 function sendPacket(name,data){
