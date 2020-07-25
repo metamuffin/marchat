@@ -25,7 +25,6 @@ import java.net.Socket;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import java.awt.Color;
-import javax.websocket.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
