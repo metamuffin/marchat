@@ -78,7 +78,7 @@ This will be sent if the action doesnt respond with a packet by default.
 
 - packet: string - *The name of the packet that was successfully processed by the server*
 
-### channel_list
+### channel-list
 
 - channels: A
 - name: string
